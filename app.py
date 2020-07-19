@@ -6,7 +6,13 @@ app = Flask(__name__)
 ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAE6It2YRkLk7oyWPwkzrZAd4g3kTi4k8ROZBJR9E2aV3PZBjNmbucEKxLVzXfSN8783PtFyOuUF9oDnFb8nyIFbnkebkM2JZCcKTWpsFFU5ChJMTS6b3N5XJ4HAeZAGSeX4MMF0hDHR3EnJj98W13bopWzZAXmZAWDIEI62OtZCF'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
-
+elements =[
+{
+    "title":"TITRE",
+    "image_url" :"image"
+},
+"button":[<BUTTON_OBJECT>]
+]
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
@@ -27,7 +33,8 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if message['message'].get('text'):
                     response_sent_text = get_message()
-                    send_message(recipient_id, response_sent_text)
+                    send_generic_message(recipient_id, elements)
+                    #send_message(recipient_id, response_sent_text)
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
