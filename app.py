@@ -1,34 +1,44 @@
-import random, sys
+import random
 from flask import Flask, request
 from pymessenger.bot import Bot
+import requests
+from scrapping import scrape_google
+
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAM79VhRDwn28urrGmc1IWfvNlVsawiYxbBRebO7HyFtoAq4gfTVs1owAjggztNVw4HJzEOVXIyL1gYknpuZAqriGRJ4y2Gl1VaH1RJ4cN81hfW2i409GZCAhjuVh3ClIOUHHp5dVevNqn0RZCqzZBy88uRklxpllWDcmT87K'
-VERIFY_TOKEN = 'VERIFY_TOKEN'
+ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
+VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
+
+
 bot = Bot(ACCESS_TOKEN)
 
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
+
 def receive_message():
     if request.method == 'GET':
-        """Before allowing people to message your bot, Facebook has implemented a verify token
-        that confirms all requests that your bot receives came from Facebook.""" 
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
-    #if the request was not get, it must be POST and we can just proceed with sending a message back to user
     else:
-        # get whatever message a user sent the bot
        output = request.get_json()
        for event in output['entry']:
           messaging = event['messaging']
           for message in messaging:
             if message.get('message'):
-                #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
                 if message['message'].get('text'):
-                    response_sent_text = get_message()
-                    send_message(recipient_id, response_sent_text)
-                #if user sends us a GIF, photo,video, or any other non-text item
+                    receive_message = message['message'].get('text').split()
+                    print(receive_message)
+                    if (receive_message[0] == "search_google"):
+                        if len(receive_message) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google mot_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_message[1:]))
+                            send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
+                            send_generic_template(recipient_id, response_query)
+                    else:
+                        response_sent_text = get_message()
+                        send_message(recipient_id, response_sent_text)
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
                     send_message(recipient_id, response_sent_nontext)
@@ -36,23 +46,58 @@ def receive_message():
 
 
 def verify_fb_token(token_sent):
-    #take token sent by facebook and verify it matches the verify token you sent
-    #if they match, allow the request, else return an error 
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
     return 'Invalid verification token'
 
-
-#chooses a random message to send to the user
 def get_message():
     sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
-    # return selected item to the user
     return random.choice(sample_responses)
 
-#uses PyMessenger to send response to user
 def send_message(recipient_id, response):
-    #sends user the text message provided via input response parameter
     bot.send_text_message(recipient_id, response)
+    return "success"
+
+def send_generic_template(recipient_id, research_query):
+    url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
+    results = scrape_google(research_query, 10, "en")
+    payload = []
+    for result in results:
+        payload.append({
+            "title": result["title"],
+            "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
+            "subtitle": result["description"],
+            "default_action": {
+                "type": "web_url",
+                "url": result["link"],
+                "webview_height_ratio": "tall",
+            },
+            "buttons": [
+                {
+                    "type": "web_url",
+                    "url": result["link"],
+                    "title": "View In Google"
+                }
+            ]
+        })
+
+    extra_data = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": payload
+            }
+        }
+    }
+
+    data = {
+        'recipient': {'id': recipient_id},
+        'message': {
+            "attachment": extra_data["attachment"]
+        }
+    }
+    resp = requests.post(url, json=data)
     return "success"
 
 if __name__ == "__main__":
