@@ -68,7 +68,7 @@ def send_message(recipient_id, response):
 
 def send_BM(recipient_id, response_sent_text,elements):
     #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, response_sent_text,elements)
+    bot.send_button_message(recipient_id, response_sent_text,elements)
     return "success"
 
 if __name__ == "__main__":
