@@ -6,12 +6,12 @@ app = Flask(__name__)
 ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
-elements =[{
-            "type":"web_url",
-            "url":"https://www.messenger.com",
-            "title":"Visit Messenger"
-          }]
-elements2 = [{
+# elements =[{
+#             "type":"web_url",
+#             "url":"https://www.messenger.com",
+#             "title":"Visit Messenger"
+#           }]
+elements2 =[{
   "type":"phone_number",
   "title":"Jao's phone",
   "payload":"+261329125857"
@@ -36,12 +36,12 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if message['message'].get('text'):
                     response_sent_text = get_message()
-                    send_BM(recipient_id, response_sent_text,elements)
+                    send_BM(recipient_id, response_sent_text,elements2)
                     send_message(recipient_id, response_sent_text)
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
-                    send_BM(recipient_id, response_sent_text,elements2)
+                    #send_BM(recipient_id, response_sent_text,elements2)
                     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
