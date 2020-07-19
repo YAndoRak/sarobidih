@@ -13,9 +13,9 @@ elements =[{
           }]
 elements2 = [
 {
-  "type": "postback",
-  "title": "Hello",
-  "payload": "Le message est"
+  "type":"phone_number",
+  "title":"Jao's phone",
+  "payload":"0329125857"
 }
 ]
 #We will receive messages that Facebook sends our bot at this endpoint 
