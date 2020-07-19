@@ -3,15 +3,14 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAE6It2YRkLk7oyWPwkzrZAd4g3kTi4k8ROZBJR9E2aV3PZBjNmbucEKxLVzXfSN8783PtFyOuUF9oDnFb8nyIFbnkebkM2JZCcKTWpsFFU5ChJMTS6b3N5XJ4HAeZAGSeX4MMF0hDHR3EnJj98W13bopWzZAXmZAWDIEI62OtZCF'
+ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 elements =[
 {
     "title":"TITRE",
     "image_url" :"image"
-},
-"button":[<BUTTON_OBJECT>]
+}
 ]
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
