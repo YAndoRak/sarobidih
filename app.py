@@ -11,13 +11,11 @@ elements =[{
             "url":"https://www.messenger.com",
             "title":"Visit Messenger"
           }]
-elements2 = [
-{
-  "type":"phone_number",
-  "title":"Jao's phone",
-  "payload":"0329125857"
-}
-]
+elements2 = [{
+    "type":"phone_number",
+    "title":"Jao's phone",
+    "payload":"0329125857"
+    }]
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
