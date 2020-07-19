@@ -31,8 +31,8 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if message['message'].get('text'):
                     response_sent_text = get_message()
-                    #send_button_message(recipient_id, response_sent_text,elements)
-                    send_message(recipient_id, response_sent_text)
+                    send_button_message(recipient_id, response_sent_text,elements)
+                    #send_message(recipient_id, response_sent_text)
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
@@ -58,6 +58,11 @@ def get_message():
 def send_message(recipient_id, response):
     #sends user the text message provided via input response parameter
     bot.send_text_message(recipient_id, response)
+    return "success"
+
+def send_button_message(recipient_id, response_sent_text,elements):
+    #sends user the text message provided via input response parameter
+    bot.send_button_message(recipient_id, response_sent_text,elements)
     return "success"
 
 if __name__ == "__main__":
