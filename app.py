@@ -14,7 +14,7 @@ elements =[{
 elements2 = [{
   "type":"phone_number",
   "title":"Jao's phone",
-  "payload":"0329125857"
+  "payload":"+261329125857"
     }]
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
@@ -66,9 +66,9 @@ def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-def send_BM(recipient_id, response_sent_text,elements):
+def send_BM(recipient_id, response_sent_text,element):
     #sends user the text message provided via input response parameter
-    bot.send_button_message(recipient_id, response_sent_text,elements)
+    bot.send_button_message(recipient_id, response_sent_text,element)
     return "success"
 
 if __name__ == "__main__":
