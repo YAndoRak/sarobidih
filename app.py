@@ -30,6 +30,7 @@ def receive_message():
        output = request.get_json()
        for event in output['entry']:
           messaging = event['messaging']
+          print(messaging)
           for message in messaging:
             if message.get('message'):
                 recipient_id = message['sender']['id']
@@ -38,7 +39,7 @@ def receive_message():
                     print(receive_message)
                     if (receive_message[0] == "search_google"):
                         if len(receive_message) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google mot_recherché')
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
                         else:
                             response_query = ' '.join(map(str, receive_message[1:]))
                             send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
@@ -51,6 +52,26 @@ def receive_message():
                     response_sent_nontext = get_message()
                     send_BM(recipient_id, response_sent_text,elements2)
                     send_message(recipient_id, response_sent_nontext)
+
+            if message.get('postback'):
+                recipient_id = message['sender']['id']
+                if message['postback'].get('payload'):
+                    receive_postback = message['postback'].get('payload').split()
+                    print(receive_postback)
+                    if receive_postback[0] == "PDF_view":
+                            if len(receive_postback) < 2:
+                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+
+
+
+
+
+
+
+
     return "Message Processed"
 
 
@@ -86,10 +107,15 @@ def send_generic_template(recipient_id, research_query):
                     "type": "web_url",
                     "url": result["link"],
                     "title": "View In Google"
+                },
+                {
+                    "type": "postback",
+                    "title": "PDF view",
+                    "payload": "PDF_view {}".format(result["link"])
                 }
             ]
         })
-
+    print(payload[0])
     extra_data = {
         "attachment": {
             "type": "template",
@@ -107,6 +133,8 @@ def send_generic_template(recipient_id, research_query):
         }
     }
     resp = requests.post(url, json=data)
+    postback_data = request.get_json()
+    print(postback_data)
     return "success"
 
 def send_BM(recipient_id, response_sent_text,element):
