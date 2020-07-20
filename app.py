@@ -67,14 +67,6 @@ def receive_message():
                                 pdfe = request.get(weburl)
                                 send_file_pdf(recipient_id, pdfe)
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-
-
-
-
-
-
-
-
     return "Message Processed"
 
 
