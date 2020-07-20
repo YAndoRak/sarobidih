@@ -1,4 +1,4 @@
-import random
+import random, pdfkit
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
@@ -63,7 +63,9 @@ def receive_message():
                                 send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                                pdf = pdfkit.from_url('http://google.com', False)
+                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(pdf))
+                                #send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
 
 
