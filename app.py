@@ -65,7 +65,7 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 url="https://webpagetopdf999.herokuapp.com/api/render?url=http://google.fr&emulateScreenMedia=false"
                                 datapdf= requests.get(url)
-                                with open('tmp/metadata.pdf', 'wb') as f:
+                                with open('/tmp/metadata.pdf', 'wb') as f:
                                     f.write(datapdf.content)
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
