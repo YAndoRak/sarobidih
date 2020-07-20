@@ -64,9 +64,21 @@ def receive_message():
                                 send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
+<<<<<<< HEAD
                                 pdfe = request.get(weburl)
                                 send_file(self, recipient_id,urlfb,pdfe):
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+=======
+                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+
+
+
+
+
+
+
+
+>>>>>>> parent of 74ce494... pdfkit add
     return "Message Processed"
 
 
