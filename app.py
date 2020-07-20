@@ -65,8 +65,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 pdfe = request.get(weburl)
-                                jsons=[{'filedata':pdfe,'type':'file/pdf'}]
-                                request.post(urlfb, jsons)
+                                send_file(self, recipient_id,urlfb,pdfe):
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
     return "Message Processed"
 
@@ -132,6 +131,36 @@ def send_generic_template(recipient_id, research_query):
     postback_data = request.get_json()
     print(postback_data)
     return "success"
+
+def send_file(self, recipient_id, urlfb,pdfe):
+    '''Send file to the specified recipient.
+    https://developers.facebook.com/docs/messenger-platform/send-api-reference/file-attachment
+    Input:
+        recipient_id: recipient id to send to
+        file_path: path to file to be sent
+    Output:
+        Response from API as <dict>
+    '''
+    payload = {
+        'recipient': json.dumps(
+            {
+                'id': recipient_id
+            }
+        ),
+        'message': json.dumps(
+            {
+                'attachment': {
+                    'type': 'file'
+                }
+            }
+        ),
+        'filedata': pdfe,
+        'type': 'file/pdf'
+    }
+    multipart_data = MultipartEncoder(payload)
+    return requests.post(urlfb, data=multipart_data).json()
+
+
 
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
