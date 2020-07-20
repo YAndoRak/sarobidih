@@ -64,9 +64,13 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 url="https://webpagetopdf999.herokuapp.com/api/render?url=http://google.fr&emulateScreenMedia=false"
+                                urltext = "http://hellolets.com/doc/alsa-base/driver/serial-u16550.txt"
                                 datapdf= requests.get(url)
                                 with open('/app/data/tmp.pdf', 'a') as f:
                                     f.write(datapdf.content)
+                                datatext = requests.get(urltext)
+                                with open('/app/data/tmp.txt', 'a') as te:
+                                    te.write(datatext.content)
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
     return "Message Processed"
