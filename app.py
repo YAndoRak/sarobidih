@@ -19,8 +19,7 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
-urlfb = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
-weburl = "https://webpagetopdf999.herokuapp.com/api/render?url=https://google.com&emulateScreenMedia=false"
+
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 
@@ -64,21 +63,8 @@ def receive_message():
                                 send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-<<<<<<< HEAD
-                                pdfe = request.get(weburl)
-                                send_file(self, recipient_id,urlfb,pdfe):
-                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-=======
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
-
-
-
-
-
-
-
->>>>>>> parent of 74ce494... pdfkit add
     return "Message Processed"
 
 
@@ -143,36 +129,6 @@ def send_generic_template(recipient_id, research_query):
     postback_data = request.get_json()
     print(postback_data)
     return "success"
-
-def send_file(self, recipient_id, urlfb,pdfe):
-    '''Send file to the specified recipient.
-    https://developers.facebook.com/docs/messenger-platform/send-api-reference/file-attachment
-    Input:
-        recipient_id: recipient id to send to
-        file_path: path to file to be sent
-    Output:
-        Response from API as <dict>
-    '''
-    payload = {
-        'recipient': json.dumps(
-            {
-                'id': recipient_id
-            }
-        ),
-        'message': json.dumps(
-            {
-                'attachment': {
-                    'type': 'file'
-                }
-            }
-        ),
-        'filedata': pdfe,
-        'type': 'file/pdf'
-    }
-    multipart_data = MultipartEncoder(payload)
-    return requests.post(urlfb, data=multipart_data).json()
-
-
 
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
