@@ -66,7 +66,7 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 pdfe = request.get(weburl)
                                 with open('file.pdf', 'wb') as f:
-                                    f.write(pdfe.content)
+                                    f.write(pdfe)
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
 
