@@ -20,7 +20,7 @@ elements2 =[{
   "payload":"+261329125857"
     }]
 
-weburl = "https://webpagetopdf999.herokuapp.com/api/render?url=http://google.com&emulateScreenMedia=false"
+weburl = "https://webpagetopdf999.herokuapp.com/api/render?url=https://google.com&emulateScreenMedia=false"
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 
@@ -65,7 +65,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 pdfe = request.get(weburl)
-                                with open('./file.pdf', 'wb') as f:
+                                with open('file.pdf', 'wb') as f:
                                     f.write(pdfe.content)
                                 send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
