@@ -1,4 +1,4 @@
-import random, pdfkit
+import random
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
@@ -19,6 +19,8 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
+
+weburl = "https://webpagetopdf999.herokuapp.com/api/render?url=http://google.com&emulateScreenMedia=false"
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 
@@ -50,7 +52,6 @@ def receive_message():
                         send_message(recipient_id, response_sent_text)
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
-                    send_BM(recipient_id, response_sent_text,elements2)
                     send_message(recipient_id, response_sent_nontext)
 
             if message.get('postback'):
@@ -63,9 +64,10 @@ def receive_message():
                                 send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                pdf = pdfkit.from_url('http://google.com', False)
-                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(pdf))
-                                #send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                                pdfe = request.get(weburl)
+                                with open('./file.pdf', 'wb') as f:
+                                    f.write(pdfe.content)
+                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
 
 
 
