@@ -36,6 +36,9 @@ def receive_message():
                 if message['message'].get('text'):
                     receive_message = message['message'].get('text').split()
                     print(receive_message)
+                    if (receive_message[0] == "sendmessage"):
+                        send_message(recipient_id, "messagerecu")
+
                     if (receive_message[0] == "search_google"):
                         if len(receive_message) < 2:
                             send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google mot_recherché')
@@ -85,6 +88,13 @@ def send_generic_template(recipient_id, research_query):
                     "type": "web_url",
                     "url": result["link"],
                     "title": "View In Google"
+                }
+            ],
+            "buttons": [
+                {
+                    "type": "postback",
+                    "url": "PostBack button",
+                    "title": "sendmessage"
                 }
             ]
         })
