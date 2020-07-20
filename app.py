@@ -93,8 +93,8 @@ def send_generic_template(recipient_id, research_query):
             "buttons": [
                 {
                     "type": "postback",
-                    "url": "PostBack button",
-                    "title": "sendmessage"
+                    "title": "PostBack button",
+                    "payload": "sendmessage"
                 }
             ]
         })
