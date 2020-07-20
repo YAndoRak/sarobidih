@@ -171,7 +171,7 @@ def send_file_pdf(self, recipient_id, file_path):
         'Content-Type': multipart_data.content_type
         'MIME' : 'type/pdf'
     }
-    return requests.post(self.base_url, data=multipart_data, headers=multipart_header).json()
+    return requests.post("https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN, data=multipart_data, headers=multipart_header).json()
 
 
 def send_BM(recipient_id, response_sent_text,element):
