@@ -105,7 +105,7 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                            video = Video(url='http://example.com/video.mp4')
+                            video = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
                             send(video.to_dict(),recipient_id, 'RESPONSE')
                             send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
