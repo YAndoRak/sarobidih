@@ -3,8 +3,8 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
 from scrapping import scrape_google, scrape_youtube
-
-
+from fbmessenger import BaseMessenger
+from fbmessenger import attachments
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
@@ -85,8 +85,10 @@ def receive_message():
                             #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                             #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
-                            #video = attachments.Video(url='http://example.com/video.mp4')
-                            send_video_youtube(recipient_id)
+                            messenger = Messenger(ACCESS_TOKEN)
+                            image = attachments.Image(url='http://example.com/image.jpg')
+                            messenger.send(image.to_dict(), 'RESPONSE')
+
                             send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
 
@@ -103,6 +105,17 @@ def get_message():
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
+
+class Messenger(BaseMessenger):
+    def __init__(self, page_access_token, app_secret=None):
+        self.page_access_token = page_access_token
+        self.app_secret = app_secret
+        self.client = MessengerClient(self.page_access_token, app_secret=self.app_secret)
+
+    def message(self, message):
+        self.send({'text': 'Received: {0}'.format(message['message']['text'])}, 'RESPONSE')
+
+
 
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
@@ -215,25 +228,6 @@ def send_generic_template_youtube(recipient_id, research_query):
     return "success"
 
 
-def send_video_youtube(recipient_id):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
-    payload = [{
-        'recipient': {'id': recipient_id},
-        "message": {
-           "attachment": {
-               "type": "template",
-               "payload": {
-                   "template_type": "open_graph",
-                   "elements": [
-                       {
-                           "url": "https://www.youtube.com/watch?v=eNuZNbeA9K8"
-                       }
-                   ]
-               }
-           }
-       }}]
-    resp = requests.post(url, json=payload)
-    return "success"
 
 
 def send_BM(recipient_id, response_sent_text,element):
