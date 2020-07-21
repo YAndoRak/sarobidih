@@ -39,6 +39,7 @@ def process_message(message):
 
     if 'payload' in message['postback']:
         msg = message['postback']['payload'].lower()
+        print("LES MSG EST ", msg)
         response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
         if 'text' in msg:
             response = Text(text='This is an example text message.')
