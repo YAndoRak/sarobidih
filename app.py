@@ -25,7 +25,7 @@ elements2 =[{
     }]
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
-
+messenger = Messenger(ACCESS_TOKEN)
 def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
@@ -74,7 +74,7 @@ def receive_message():
                         else:
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-                    if receive_postback[0] == "Download":
+                    if receive_postback[0] == "image":
                         if len(receive_postback) < 2:
                             send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                         else:
@@ -85,8 +85,9 @@ def receive_message():
                             #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                             #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
-                            messenger = Messenger(ACCESS_TOKEN)
+                            app.logger.debug(request.get_json(force=True))
                             messenger.handle(request.get_json(force=True))
+                            print(messenger)
                             send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
 
@@ -126,8 +127,11 @@ def process_message(message, url_file=None):
             response = Text(text='This is an example text message.')
         if 'image' in msg:
             response = Image(url='https://unsplash.it/300/200/?random')
+            print('tonge teto image')
         if 'viewvideo' in msg:
             response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
+            app.logger.debug('Tonga teto')
+            print('tonge teto')
         if 'payload' in msg:
             txt = 'User clicked {}, button payload is {}'.format(
                 msg,
@@ -228,7 +232,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Télecharger",
-                    "payload": "Download {}".format(result["link"])
+                    "payload": "image"
                 },
                 {
                     "type": "postback",
