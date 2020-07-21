@@ -217,7 +217,7 @@ def send_generic_template_youtube(recipient_id, research_query):
 
 def send_video_youtube(recipient_id):
     url = "https://graph.facebook.com/v7/me/messages?access_token="+ACCESS_TOKEN
-    payload = [
+    payload = [{
         'recipient': {'id': recipient_id},
         "message": {
            "attachment": {
@@ -231,7 +231,7 @@ def send_video_youtube(recipient_id):
                    ]
                }
            }
-       }]
+       }}]
     resp = requests.post(url, json=payload)
     return "success"
 
