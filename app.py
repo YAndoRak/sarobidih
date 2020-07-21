@@ -129,7 +129,7 @@ def process_message(message, url_file=None):
             response = Text(text='This is an example text message.')
         if 'image' in msg:
             response = Image(url='https://unsplash.it/300/200/?random')
-        if 'View_here' in msg:
+        if 'viewvideo' in msg:
             response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
         if 'payload' in msg:
             txt = 'User clicked {}, button payload is {}'.format(
@@ -237,7 +237,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload": "View_here"
+                    "payload": "viewvideo"
                 }
             ]
         })
