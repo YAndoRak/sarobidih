@@ -84,7 +84,7 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                            send_message_youtube_video(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
+                            send_message_youtube_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
                             send_message(recipient_id, 'Profiter bien')
 
 
@@ -121,7 +121,7 @@ def send_message_video(recipien_id, response):
     bot.send_video(recipien_id, response)
     return "success"
 
-def send_file(self, recipient_id, video_url):
+def send_message_youtube_url(self, recipient_id, video_url):
     '''Send file to the specified recipient.
     https://developers.facebook.com/docs/messenger-platform/send-api-reference/file-attachment
     Input:
