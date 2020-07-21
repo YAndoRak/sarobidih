@@ -86,17 +86,6 @@ def receive_message():
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                             send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
                             send_message(recipient_id, 'Profiter bien')
-
-
-
-
-
-
-
-
-
-
-
     return "Message Processed"
 
 
@@ -162,9 +151,15 @@ def send_video_url(self, recipient_id, video_url):
             'message': json.dumps(
                 {
                     'attachment': {
-                        'type': 'video',
+                        'type': 'template',
                         'payload': {
-                            'url': video_url
+                            'template_type': 'media',
+                            'elements':[
+                                {
+                                "media_type":"video",
+                                "url":video_url
+                                }
+                            ]
                         }
                     }
                 }
