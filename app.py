@@ -4,10 +4,8 @@ from pymessenger.bot import Bot
 import requests
 from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
-from fbmessenger import attachments
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
-from fbmessenger.elements import Text
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
@@ -26,39 +24,40 @@ elements2 =[{
 
 ################ fb messenger #################"""
 #
-def process_message(message, url_file=None):
+def process_message(message):
     app.logger.debug('Message received: {}'.format(message))
 
-    if 'attachments' in message['postback']:
+    if 'attachments' in message['message']:
         if message['message']['attachments'][0]['type'] == 'location':
             app.logger.debug('Location received')
             response = Text(text='{}: lat: {}, long: {}'.format(
-                message['postback']['attachments'][0]['title'],
-                message['postback']['attachments'][0]['payload']['coordinates']['lat'],
-                message['postback']['attachments'][0]['payload']['coordinates']['long']
+                message['message']['attachments'][0]['title'],
+                message['message']['attachments'][0]['payload']['coordinates']['lat'],
+                message['message']['attachments'][0]['payload']['coordinates']['long']
             ))
             return response.to_dict()
 
-    msg = message['postback']['text'].lower()
-    response = Image(url='https://unsplash.it/300/200/?random')
-    if 'payload' in msg:
-        txt = 'User clicked {}, button payload is {}'.format(
-            msg,
-            message['message']['payload']
-        )
-        response = Text(text=txt)
-
+    if 'postback' in message['message']:
+        msg = message['message']['postback'].lower()
+        response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
+        if 'text' in msg:
+            response = Text(text='This is an example text message.')
+        if 'image' in msg:
+            response = Image(url='https://unsplash.it/300/200/?random')
+        if 'video' in msg:
+            response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
         return response.to_dict()
 
 
 class Messenger(BaseMessenger):
-    def __init__(self, page_access_token, app_secret=None):
+    def __init__(self, page_access_token):
         self.page_access_token = page_access_token
         super(Messenger, self).__init__(self.page_access_token)
 
     def message(self, message):
         action = process_message(message)
         res = self.send(action, 'RESPONSE')
+        app.logger.debug('Response: {}'.format(res))
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
@@ -120,7 +119,6 @@ def receive_message():
                         #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                         send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                         #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
-                        app.logger.debug(request.get_json(force=True))
                         messenger.handle(request.get_json(force=True))
                         print(messenger)
                         send_message(recipient_id, 'Profiter bien')
