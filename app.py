@@ -121,6 +121,42 @@ def send_message_video(recipien_id, response):
     bot.send_video(recipien_id, response)
     return "success"
 
+def send_file(self, recipient_id, video_url):
+    '''Send file to the specified recipient.
+    https://developers.facebook.com/docs/messenger-platform/send-api-reference/file-attachment
+    Input:
+        recipient_id: recipient id to send to
+        file_path: path to file to be sent
+    Output:
+        Response from API as <dict>
+    '''
+    payload = {
+        'recipient': json.dumps(
+            {
+                'id': recipient_id
+            }
+        ),
+        'message': json.dumps(
+            {
+                'attachment': {
+                    'type': 'template',
+                    'payload': {
+                        "template_type":"media",
+                        "elements":[{
+                        "media_type":"video",
+                        "url":video_url
+                        }]
+                    }
+                }
+            }
+        )
+    }
+    multipart_data = MultipartEncoder(payload)
+    multipart_header = {
+        'Content-Type': multipart_data.content_type
+    }
+    return requests.post(self.base_url, data=multipart_data, headers=multipart_header).json()
+
 def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
