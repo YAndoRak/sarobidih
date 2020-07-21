@@ -80,7 +80,7 @@ def receive_message():
                         else:
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    if receive_postback[0] == "View_here":
+                    if receive_postback[0] == "viewvideo":
                         if len(receive_postback) < 2:
                             send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                         else:
