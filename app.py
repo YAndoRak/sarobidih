@@ -23,6 +23,16 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
+
+class Messenger(BaseMessenger):
+    def __init__(self, page_access_token, app_secret=None):
+        self.page_access_token = page_access_token
+        super(Messenger, self).__init__(self.page_access_token)
+
+    def message(self, message):
+        action = process_message(message)
+        res = self.send(action, 'RESPONSE')
+
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
@@ -140,16 +150,6 @@ def process_message(message, url_file=None):
             response = Text(text=txt)
 
         return response.to_dict()
-
-
-class Messenger(BaseMessenger):
-    def __init__(self, page_access_token, app_secret=None):
-        self.page_access_token = page_access_token
-        super(Messenger, self).__init__(self.page_access_token)
-
-    def message(self, message):
-        action = process_message(message)
-        res = self.send(action, 'RESPONSE')
 
 
 
