@@ -82,9 +82,9 @@ def receive_message():
                             send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                         else:
                             response_query = ' '.join(map(str, receive_postback[1:]))
-                            path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
+                            #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                            send_message_youtube_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
+                            send_message_youtube_video(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
                             send_message(recipient_id, 'Profiter bien')
 
 
@@ -109,8 +109,8 @@ def get_message():
     sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
     return random.choice(sample_responses)
 
-def send_message_youtube_url(recipient_id, response):
-    bot.send_video_url(recipient_id, response)
+def send_message_youtube_video(recipient_id, response):
+    bot.send_video(recipient_id, response)
     return "success"
 
 def send_message(recipient_id, response):
