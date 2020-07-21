@@ -2,11 +2,12 @@ import random
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
-from scrapping import scrape_google
+from scrapping import scrape_google, scrape_youtube
+
 
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
+ACCESS_TOKEN = 'EAAI1QygXjocBACcWBmh8hmAOWHx2prZCSfXzwWNip0fHPVIfHphDBPIzmqWbrD3vQUGKOWBceWfl2DTAhnZATVuvQHc4yVE3JfZBS20GkHISHbks9IBQRAZBquZBGd6wtDDZB1nYk4S9fPgjSf0snsAjZBX4ptMHVm4mn1mwCK44fKjcaKA6xDl'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -43,7 +44,14 @@ def receive_message():
                         else:
                             response_query = ' '.join(map(str, receive_message[1:]))
                             send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
-                            send_generic_template(recipient_id, response_query)
+                            send_generic_template_google(recipient_id, response_query)
+                    if (receive_message[0] == "search_youtube"):
+                        if len(receive_message) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_message[1:]))
+                            send_message(recipient_id, 'ok, research youtube {} en cours ....'.format(response_query))
+                            send_generic_template_youtube(recipient_id, response_query)
                     else:
                         response_sent_text = get_message()
                         send_BM(recipient_id, response_sent_text,elements2)
@@ -59,11 +67,29 @@ def receive_message():
                     receive_postback = message['postback'].get('payload').split()
                     print(receive_postback)
                     if receive_postback[0] == "PDF_view":
-                            if len(receive_postback) < 2:
-                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                            else:
-                                response_query = ' '.join(map(str, receive_postback[1:]))
-                                send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                        if len(receive_postback) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                    if receive_postback[0] == "Download":
+                        if len(receive_postback) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                    if receive_postback[0] == "View_here":
+                        if len(receive_postback) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
+                            send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                            send_message_youtube_url(recipient_id, 'https://www.youtube.com/watch?v=_IiCS5r9gaUgit ')
+                            send_message(recipient_id, 'Profiter bien')
+
+
+
 
 
 
@@ -84,11 +110,19 @@ def get_message():
     sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
     return random.choice(sample_responses)
 
+def send_message_youtube_url(recipient_id, response):
+    bot.send_video_url(recipient_id, response)
+    return "success"
+
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-def send_generic_template(recipient_id, research_query):
+def send_message_video(recipien_id, response):
+    bot.send_video(recipien_id, response)
+    return "success"
+
+def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
     payload = []
@@ -112,6 +146,63 @@ def send_generic_template(recipient_id, research_query):
                     "type": "postback",
                     "title": "PDF view",
                     "payload": "PDF_view {}".format(result["link"])
+                }
+            ]
+        })
+    print(payload[0])
+    extra_data = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": payload
+            }
+        }
+    }
+
+    data = {
+        'recipient': {'id': recipient_id},
+        'message': {
+            "attachment": extra_data["attachment"]
+        }
+    }
+    resp = requests.post(url, json=data)
+    postback_data = request.get_json()
+    print(postback_data)
+    return "success"
+
+
+def send_generic_template_youtube(recipient_id, research_query):
+    url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
+    results = scrape_youtube(research_query)
+
+    payload = []
+    print(results)
+    for result in results['search_result']:
+        payload.append({
+            "title": result["title"],
+            "image_url": result['thumbnails'][2],
+            "subtitle": "Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"], result["channel"]),
+            "default_action": {
+                "type": "web_url",
+                "url": result["link"],
+                "webview_height_ratio": "tall",
+            },
+            "buttons": [
+                {
+                    "type": "web_url",
+                    "url": result["link"],
+                    "title": "View In Youtube"
+                },
+                {
+                    "type": "postback",
+                    "title": "Télecharger",
+                    "payload": "Download {}".format(result["link"])
+                },
+                {
+                    "type": "postback",
+                    "title": "Regarder Ici",
+                    "payload": "View_here {}".format(result["link"])
                 }
             ]
         })
