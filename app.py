@@ -39,8 +39,10 @@ def process_message(message, url_file=None):
             ))
             return response.to_dict()
 
-    if 'text' in message['postback']:
+    if 'image' in message['postback']:
         msg = message['postback']['text'].lower()
+        app.logger.debug(msg)
+        print(msg)
         response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
         if 'text' in msg:
             response = Text(text='This is an example text message.')
