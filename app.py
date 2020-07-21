@@ -44,7 +44,7 @@ def process_message(message):
             response = Text(text='This is an example text message.')
         if 'image' in msg:
             response = Image(url='https://unsplash.it/300/200/?random')
-        if 'video' in msg:
+        if 'viewvideo' in msg:
             response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
         return response.to_dict()
 
