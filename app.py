@@ -89,7 +89,7 @@ def receive_message():
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                             #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
                             messenger = Messenger(ACCESS_TOKEN)
-                            messenger.handle('video')
+                            messenger.handle(request.get_json(force=True))
                             send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
 
@@ -112,18 +112,18 @@ def send_message(recipient_id, response):
 def process_message(message, url_file=None):
     app.logger.debug('Message received: {}'.format(message))
 
-    if 'attachments' in message['message']:
+    if 'attachments' in message['postback']:
         if message['message']['attachments'][0]['type'] == 'location':
             app.logger.debug('Location received')
             response = Text(text='{}: lat: {}, long: {}'.format(
-                message['message']['attachments'][0]['title'],
-                message['message']['attachments'][0]['payload']['coordinates']['lat'],
-                message['message']['attachments'][0]['payload']['coordinates']['long']
+                message['postback']['attachments'][0]['title'],
+                message['postback']['attachments'][0]['payload']['coordinates']['lat'],
+                message['postback']['attachments'][0]['payload']['coordinates']['long']
             ))
             return response.to_dict()
 
-    if 'text' in message['message']:
-        msg = message['message']['text'].lower()
+    if 'text' in message['postback']:
+        msg = message['postback']['text'].lower()
         response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
         if 'text' in msg:
             response = Text(text='This is an example text message.')
