@@ -109,10 +109,6 @@ def get_message():
     sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
     return random.choice(sample_responses)
 
-def send_message_video_url(recipient_id, response):
-    bot.send_video_url(recipient_id, response)
-    return "success"
-
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
@@ -156,7 +152,34 @@ def send_message_youtube_url(self, recipient_id, video_url):
         'Content-Type': multipart_data.content_type
     }
     return requests.post(self.base_url, data=multipart_data, headers=multipart_header).json()
-
+   def send_video_url(self, recipient_id, video_url):
+        '''Send video to specified recipient using URL.
+        Video should be MP4 or MOV, but supports more (https://www.facebook.com/help/218673814818907).
+        https://developers.facebook.com/docs/messenger-platform/send-api-reference/video-attachment 
+        Input:
+            recipient_id: recipient id to send to
+            video_url: url of video to be sent
+        Output:
+            Response from API as <dict>
+        '''
+        payload = {
+            'recipient': json.dumps(
+                {
+                    'id': recipient_id
+                }
+            ),
+            'message': json.dumps(
+                {
+                    'attachment': {
+                        'type': 'video',
+                        'payload': {
+                            'url': video_url
+                        }
+                    }
+                }
+            )
+        }
+        return self.send_raw(payload)
 def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
