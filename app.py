@@ -117,9 +117,9 @@ def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-def send_message_video(recipien_id, response):
-    bot.send_video(recipien_id, response)
-    return "success"
+# def send_message_video(recipien_id, response):
+#     bot.send_video(recipien_id, response)
+#     return "success"
 
 def send_message_youtube_url(self, recipient_id, video_url):
     '''Send file to the specified recipient.
