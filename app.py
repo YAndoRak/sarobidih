@@ -24,6 +24,43 @@ elements2 =[{
   "payload":"+261329125857"
     }]
 
+################ fb messenger #################"""
+#
+def process_message(message, url_file=None):
+    app.logger.debug('Message received: {}'.format(message))
+
+    if 'attachments' in message['postback']:
+        if message['message']['attachments'][0]['type'] == 'location':
+            app.logger.debug('Location received')
+            response = Text(text='{}: lat: {}, long: {}'.format(
+                message['postback']['attachments'][0]['title'],
+                message['postback']['attachments'][0]['payload']['coordinates']['lat'],
+                message['postback']['attachments'][0]['payload']['coordinates']['long']
+            ))
+            return response.to_dict()
+
+    if 'text' in message['postback']:
+        msg = message['postback']['text'].lower()
+        response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
+        if 'text' in msg:
+            response = Text(text='This is an example text message.')
+        if 'image' in msg:
+            response = Image(url='https://unsplash.it/300/200/?random')
+            print('tonge teto image')
+        if 'viewvideo' in msg:
+            response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
+            app.logger.debug('Tonga teto')
+            print('tonge teto')
+        if 'payload' in msg:
+            txt = 'User clicked {}, button payload is {}'.format(
+                msg,
+                message['message']['payload']
+            )
+            response = Text(text=txt)
+
+        return response.to_dict()
+
+
 class Messenger(BaseMessenger):
     def __init__(self, page_access_token, app_secret=None):
         self.page_access_token = page_access_token
@@ -85,20 +122,17 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
                     if receive_postback[0] == "image":
-                        if len(receive_postback) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_postback[1:]))
-                            send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                        response_query = ' '.join(map(str, receive_postback[1:]))
+                        send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                     if receive_postback[0] == "viewvideo":
-                            response_query = ' '.join(map(str, receive_postback[1:]))
-                            #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
-                            send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                            #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
-                            app.logger.debug(request.get_json(force=True))
-                            messenger.handle(request.get_json(force=True))
-                            print(messenger)
-                            send_message(recipient_id, 'Profiter bien')
+                        response_query = ' '.join(map(str, receive_postback[1:]))
+                        #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
+                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                        #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
+                        app.logger.debug(request.get_json(force=True))
+                        messenger.handle(request.get_json(force=True))
+                        print(messenger)
+                        send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
 
 
@@ -115,41 +149,6 @@ def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-################ fb messenger #################"""
-#
-def process_message(message, url_file=None):
-    app.logger.debug('Message received: {}'.format(message))
-
-    if 'attachments' in message['postback']:
-        if message['message']['attachments'][0]['type'] == 'location':
-            app.logger.debug('Location received')
-            response = Text(text='{}: lat: {}, long: {}'.format(
-                message['postback']['attachments'][0]['title'],
-                message['postback']['attachments'][0]['payload']['coordinates']['lat'],
-                message['postback']['attachments'][0]['payload']['coordinates']['long']
-            ))
-            return response.to_dict()
-
-    if 'text' in message['postback']:
-        msg = message['postback']['text'].lower()
-        response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
-        if 'text' in msg:
-            response = Text(text='This is an example text message.')
-        if 'image' in msg:
-            response = Image(url='https://unsplash.it/300/200/?random')
-            print('tonge teto image')
-        if 'viewvideo' in msg:
-            response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
-            app.logger.debug('Tonga teto')
-            print('tonge teto')
-        if 'payload' in msg:
-            txt = 'User clicked {}, button payload is {}'.format(
-                msg,
-                message['message']['payload']
-            )
-            response = Text(text=txt)
-
-        return response.to_dict()
 
 
 
