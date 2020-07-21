@@ -58,7 +58,6 @@ def receive_message():
                         send_message(recipient_id, response_sent_text)
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
-                    send_BM(recipient_id, response_sent_text,elements2)
                     send_message(recipient_id, response_sent_nontext)
 
             if message.get('postback'):
