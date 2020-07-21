@@ -38,7 +38,7 @@ def process_message(message):
             return response.to_dict()
 
     if 'postback' in message:
-        print(message)
+        print("LE MESSAGE EST :",message)
         app.logger.debug(message)
         msg = message['message']['postback'].lower()
         response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
