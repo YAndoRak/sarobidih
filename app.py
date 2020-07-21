@@ -39,26 +39,14 @@ def process_message(message, url_file=None):
             ))
             return response.to_dict()
 
-    if 'image' in message['postback']:
-        msg = message['postback']['text'].lower()
-        app.logger.debug(msg)
-        print(msg)
-        response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
-        if 'text' in msg:
-            response = Text(text='This is an example text message.')
-        if 'image' in msg:
-            response = Image(url='https://unsplash.it/300/200/?random')
-            print('tonge teto image')
-        if 'viewvideo' in msg:
-            response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
-            app.logger.debug('Tonga teto')
-            print('tonge teto')
-        if 'payload' in msg:
-            txt = 'User clicked {}, button payload is {}'.format(
-                msg,
-                message['message']['payload']
-            )
-            response = Text(text=txt)
+    msg = message['postback']['text'].lower()
+    response = Image(url='https://unsplash.it/300/200/?random')
+    if 'payload' in msg:
+        txt = 'User clicked {}, button payload is {}'.format(
+            msg,
+            message['message']['payload']
+        )
+        response = Text(text=txt)
 
         return response.to_dict()
 
@@ -126,6 +114,7 @@ def receive_message():
                     if receive_postback[0] == "image":
                         response_query = ' '.join(map(str, receive_postback[1:]))
                         send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                        messenger.handle(request.get_json(force=True))
                     if receive_postback[0] == "viewvideo":
                         response_query = ' '.join(map(str, receive_postback[1:]))
                         #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
