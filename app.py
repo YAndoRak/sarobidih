@@ -23,9 +23,9 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
+messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
-messenger = Messenger(ACCESS_TOKEN)
 def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
