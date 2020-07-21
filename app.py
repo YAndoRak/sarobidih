@@ -37,7 +37,9 @@ def process_message(message):
             ))
             return response.to_dict()
 
-    if 'postback' in message['message']:
+    if 'postback' in message:
+        print(message)
+        app.logger.debug(message)
         msg = message['message']['postback'].lower()
         response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
         if 'text' in msg:
@@ -98,7 +100,6 @@ def receive_message():
                 if message['message'].get('attachments'):
                     response_sent_nontext = get_message()
                     send_message(recipient_id, response_sent_nontext)
-
             if message.get('postback'):
                 recipient_id = message['sender']['id']
                 if message['postback'].get('payload'):
