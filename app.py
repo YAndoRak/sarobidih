@@ -36,18 +36,15 @@ def process_message(message):
                 message['message']['attachments'][0]['payload']['coordinates']['long']
             ))
             return response.to_dict()
-
-    if 'payload' in message['postback']:
-        msg = message['postback']['payload'].lower()
-        print("LES MSG EST ", msg)
-        response = Text(text='Sorry didn\'t understand that: {}'.format(msg))
-        if 'text' in msg:
-            response = Text(text='This is an example text message.')
-        if 'image' in msg:
-            response = Image(url='https://unsplash.it/300/200/?random')
-        if 'viewvideo' in msg:
-            response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
-        return response.to_dict()
+    msg = message['postback']['payload'].lower()
+    print("LES MSG EST ", msg)
+    if 'text' in msg:
+        response = Text(text='This is an example text message.')
+    if 'image' in msg:
+        response = Image(url='https://unsplash.it/300/200/?random')
+    if 'viewvideo' in msg:
+        response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
+    return response.to_dict()
 
 
 class Messenger(BaseMessenger):
