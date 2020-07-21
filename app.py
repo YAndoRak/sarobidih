@@ -84,7 +84,7 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                            send_message_youtube_url(recipient_id, 'https://www.youtube.com/watch?v=_IiCS5r9gaUgit ')
+                            send_message_youtube_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
                             send_message(recipient_id, 'Profiter bien')
 
 
