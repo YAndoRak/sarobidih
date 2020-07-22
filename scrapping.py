@@ -11,16 +11,14 @@ USER_AGENT = {
 
 def scrape_youtube(search_term):
     assert isinstance(search_term, str), 'Search term must be a string'
-    escaped_search_term = search_term.replace(' ', '+')
-    search = SearchVideos(escaped_search_term, offset=1, mode="dict", max_results=10)
+    search = SearchVideos(search_term, offset=1, mode="dict", max_results=10)
 
     return search.result()
 
 def fetch_results(search_term, number_results, language_code):
     assert isinstance(search_term, str), 'Search term must be a string'
     assert isinstance(number_results, int), 'Number of results must be an integer'
-
-    google_url = 'https://www.google.com/search?q={}&num={}&hl={}'.format(escaped_search_term, number_results,language_code)
+    google_url = 'https://www.google.com/search?q={}&num={}&hl={}'.format(search_term, number_results,language_code)
     response = requests.get(google_url, headers=USER_AGENT)
     response.raise_for_status()
 
