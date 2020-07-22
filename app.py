@@ -84,6 +84,14 @@ def receive_message():
                         else:
                             response_sent_text = get_message()
                             send_BM(recipient_id, response_sent_text,elements2)
+                            fburl = 'https://graph-video.facebook.com/v2.3/156588/videos?access_token=EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
+                            videoName = 'myname'
+                            videoDescription = 'description'
+                            videoUrl='http://techslides.com/demos/sample-videos/small.mp4'
+                            payload = {'name': '%s' %(videoName), 'description': '%s' %(videoDescription), 'file_url': '%s' %(videoUrl)}
+                            flag = requests.post(fburl, data=payload).text
+                            print(flag)
+                            fb_res = json.loads(flag)
                             send_message(recipient_id, response_sent_text)
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
@@ -190,7 +198,7 @@ def send_generic_template_youtube(recipient_id, research_query):
             "subtitle": "Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"], result["channel"]),
             "default_action": {
                 "type": "web_url",
-                "url": result["link"],
+                "url": "https://r4---sn-q0cedn7s.googlevideo.com/videoplayback?expire=1595464559&ei=D4cYX8nmBM2pxN8Pzvmx2A8&ip=54.154.4.19&id=o-AFM-BjtFyA8fupXQFLZ9JH9mRA7HxwBzr5iH4gqMsfpF&itag=249&source=youtube&requiressl=yes&mh=q1&mm=31%2C26&mn=sn-q0cedn7s%2Csn-4g5edn7y&ms=au%2Conr&mv=u&mvi=4&pl=22&vprv=1&mime=audio%2Fwebm&gir=yes&clen=1283583&dur=194.801&lmt=1595377258766667&mt=1595442728&fvip=4&keepalive=yes&fexp=23883097&beids=9466588&c=WEB&txp=5511222&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&sig=AOq0QJ8wRQIgSDYtwvD4dznUwNz-Pi4NMwIo79KM-g52zC9KFmCro6QCIQDyE2DE4KV8BWT0PiYr8UqNwv-FcL2_1unzqdyMhCzT_g%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl&lsig=AG3C_xAwRQIhALY8uvc3MuYdcc27n4lA2BDaZaaxkp2kdEGpTtsfhrLxAiBTHbmU_9BHxMnXHg-_zYiFngNpRRvOgi0ABCUsk0WtBg%3D%3D&ratebypass=yes",
                 "webview_height_ratio": "tall",
             },
             "buttons": [
