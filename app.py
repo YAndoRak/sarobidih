@@ -199,7 +199,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload":"image https://unsplash.it/300/200/?random"
+                    "payload":"viewvideo http://techslides.com/demos/sample-videos/small.mp4"
                 }
             ]
         })
@@ -231,4 +231,4 @@ def send_BM(recipient_id, response_sent_text,element):
     return "success"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
