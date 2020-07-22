@@ -24,38 +24,23 @@ elements2 =[{
 
 ################ fb messenger #################"""
 #
-def process_message(message):
-    app.logger.debug('Message received: {}'.format(message))
-
-    if 'attachments' in message['message']:
-        if message['message']['attachments'][0]['type'] == 'location':
-            app.logger.debug('Location received')
-            response = Text(text='{}: lat: {}, long: {}'.format(
-                message['message']['attachments'][0]['title'],
-                message['message']['attachments'][0]['payload']['coordinates']['lat'],
-                message['message']['attachments'][0]['payload']['coordinates']['long']
-            ))
-            return response.to_dict()
-    msg = message['postback']['payload'].lower()
-    print("LES MSG EST ", msg)
-    if 'text' in msg:
-        response = Text(text='This is an example text message.')
-    if 'image' in msg:
-        response = Image(url='https://unsplash.it/300/200/?random')
-    if 'viewvideo' in msg:
-        response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
-    return response.to_dict()
-
-
 class Messenger(BaseMessenger):
     def __init__(self, page_access_token):
         self.page_access_token = page_access_token
         super(Messenger, self).__init__(self.page_access_token)
 
-    def message(self, message):
-        action = process_message(message)
-        res = self.send(action, 'RESPONSE')
-        app.logger.debug('Response: {}'.format(res))
+    def postback(self, message):
+        payload = message['postback']['payload'].split()
+        payload2 = payload[1]
+        payload1 = payload[0]
+        if 'image' in payload1:
+            response = Image(url=payload2)
+        elif 'viewvideo' in payload1:
+            response = Video(url=payload2)
+        else : response = Text(text='This is an example text message.')
+        action = response.to_dict()
+        self.send(action, 'RESPONSE')
+        
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
@@ -65,60 +50,55 @@ def receive_message():
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
     else:
-       output = request.get_json()
-       for event in output['entry']:
-          messaging = event['messaging']
-          print(messaging)
-          for message in messaging:
-            if message.get('message'):
-                recipient_id = message['sender']['id']
-                if message['message'].get('text'):
-                    receive_message = message['message'].get('text').split()
-                    print(receive_message)
-                    if (receive_message[0] == "search_google"):
-                        if len(receive_message) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
+        output = request.get_json()
+        for event in output['entry']:
+            messaging = event['messaging']
+            for message in messaging:
+                if message.get('message'):
+                    recipient_id = message['sender']['id']
+                    if message['message'].get('text'):
+                        receive_message = message['message'].get('text').split()
+                        if (receive_message[0] == "search_google"):
+                            if len(receive_message) < 2:
+                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_message[1:]))
+                                send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
+                                send_generic_template_google(recipient_id, response_query)
+                        if (receive_message[0] == "search_youtube"):
+                            if len(receive_message) < 2:
+                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_message[1:]))
+                                send_message(recipient_id, 'ok, research youtube {} en cours ....'.format(response_query))
+                                send_generic_template_youtube(recipient_id, response_query)
                         else:
-                            response_query = ' '.join(map(str, receive_message[1:]))
-                            send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
-                            send_generic_template_google(recipient_id, response_query)
-                    if (receive_message[0] == "search_youtube"):
-                        if len(receive_message) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_message[1:]))
-                            send_message(recipient_id, 'ok, research youtube {} en cours ....'.format(response_query))
-                            send_generic_template_youtube(recipient_id, response_query)
+                            response_sent_text = get_message()
+                            send_BM(recipient_id, response_sent_text,elements2)
+                            messenger.handle(request.get_json(force=True))
+                            send_message(recipient_id, response_sent_text)
+                    if message['message'].get('attachments'):
+                        response_sent_nontext = get_message()
+                        send_message(recipient_id, response_sent_nontext)
+        if message.get('postback'):
+            recipient_id = message['sender']['id']
+            if message['postback'].get('payload'):
+                receive_postback = message['postback'].get('payload').split()
+                if receive_postback[0] == "PDF_view":
+                    if len(receive_postback) < 2:
+                        send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                     else:
-                        response_sent_text = get_message()
-                        send_BM(recipient_id, response_sent_text,elements2)
-                        send_message(recipient_id, response_sent_text)
-                if message['message'].get('attachments'):
-                    response_sent_nontext = get_message()
-                    send_message(recipient_id, response_sent_nontext)
-            if message.get('postback'):
-                recipient_id = message['sender']['id']
-                if message['postback'].get('payload'):
-                    receive_postback = message['postback'].get('payload').split()
-                    print(receive_postback)
-                    if receive_postback[0] == "PDF_view":
-                        if len(receive_postback) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_postback[1:]))
-                            send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-                    if receive_postback[0] == "image":
                         response_query = ' '.join(map(str, receive_postback[1:]))
-                        send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                        messenger.handle(request.get_json(force=True))
-                    if receive_postback[0] == "viewvideo":
-                        response_query = ' '.join(map(str, receive_postback[1:]))
-                        #path = './DIR-PATH-HEREMaroon 5 - Memories (Official Video).mp4'
-                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                        #send_video_url(recipient_id, 'http://techslides.com/demos/sample-videos/small.mp4')
-                        messenger.handle(request.get_json(force=True))
-                        print(messenger)
-                        send_message(recipient_id, 'Profiter bien')
+                        send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                if receive_postback[0] == "image":
+                    response_query = ' '.join(map(str, receive_postback[1:]))
+                    send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                    messenger.handle(request.get_json(force=True))
+                if receive_postback[0] == "viewvideo":
+                    response_query = ' '.join(map(str, receive_postback[1:]))
+                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                    messenger.handle(request.get_json(force=True))
+                    send_message(recipient_id, 'Profiter bien')
     return "Message Processed"
 
 
@@ -169,7 +149,6 @@ def send_generic_template_google(recipient_id, research_query):
                 }
             ]
         })
-    print(payload[0])
     extra_data = {
         "attachment": {
             "type": "template",
@@ -188,7 +167,6 @@ def send_generic_template_google(recipient_id, research_query):
     }
     resp = requests.post(url, json=data)
     postback_data = request.get_json()
-    print(postback_data)
     return "success"
 
 
@@ -197,7 +175,6 @@ def send_generic_template_youtube(recipient_id, research_query):
     results = scrape_youtube(research_query)
 
     payload = []
-    print(results)
     for result in results['search_result']:
         payload.append({
             "title": result["title"],
@@ -216,17 +193,16 @@ def send_generic_template_youtube(recipient_id, research_query):
                 },
                 {
                     "type": "postback",
-                    "title": "Télecharger",
-                    "payload": "image"
+                    "title": "IMAGETEST",
+                    "payload":"image https://unsplash.it/300/200/?random"
                 },
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload": "viewvideo"
+                    "payload":"viewvideo http://techslides.com/demos/sample-videos/small.mp4"
                 }
             ]
         })
-    print(payload[0])
     extra_data = {
         "attachment": {
             "type": "template",
@@ -245,7 +221,6 @@ def send_generic_template_youtube(recipient_id, research_query):
     }
     resp = requests.post(url, json=data)
     postback_data = request.get_json()
-    print(postback_data)
     return "success"
 
 
@@ -256,4 +231,4 @@ def send_BM(recipient_id, response_sent_text,element):
     return "success"
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
