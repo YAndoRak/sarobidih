@@ -35,12 +35,12 @@ class Messenger(BaseMessenger):
         payload2 = payload[1]
         payload1 = payload[0]
         ####YOUTUBE DL#####
-        ydl = YoutubeDL()
-        url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
-        r = ydl.extract_info(url, download=False)
-        payloadt = [format['url'] for format in r['formats']]
-        payloadtest= payloadt[0]
-        print(payloadtest)
+        #ydl = YoutubeDL()
+        #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
+        #r = ydl.extract_info(url, download=False)
+        #payloadt = [format['url'] for format in r['formats']]
+        #payloadtest= payloadt[0]
+        #print(payloadtest)
         ###################
         if 'image' in payload1:
             response = Image(url=payload2)
