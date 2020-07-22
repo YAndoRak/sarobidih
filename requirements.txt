@@ -15,4 +15,4 @@ urllib3==1.25.9
 Werkzeug==1.0.1
 beautifulsoup4
 youtube-search-python
-fbmessenger==3.1.0
+fbmessenger
