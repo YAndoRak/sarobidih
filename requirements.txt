@@ -16,3 +16,4 @@ Werkzeug==1.0.1
 beautifulsoup4
 youtube-search-python
 fbmessenger
+youtube-dl

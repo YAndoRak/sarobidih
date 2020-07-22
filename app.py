@@ -6,6 +6,7 @@ from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
+from youtube_dl import YoutubeDL
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
@@ -31,8 +32,15 @@ class Messenger(BaseMessenger):
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        payload2 = payload[1]
+        #payload2 = payload[1]
         payload1 = payload[0]
+        ####YOUTUBE DL#####
+        ydl = YoutubeDL()
+        url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
+        r = ydl.extract_info(url, download=False)
+        payload2 = [f['url'] for f in r['formats'] if f['acodec'] != 'none' and f['vcodec'] != 'none']
+
+        ###################
         if 'image' in payload1:
             response = Image(url=payload2)
         elif 'viewvideo' in payload1:
