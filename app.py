@@ -227,7 +227,7 @@ def send_generic_template_youtube(recipient_id, research_query):
 
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
-    return "success"
+    return "successe"
 
 if __name__ == "__main__":
     app.run()
