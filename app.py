@@ -32,19 +32,19 @@ class Messenger(BaseMessenger):
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        #payload2 = payload[1]
+        payload2 = payload[1]
         payload1 = payload[0]
         ####YOUTUBE DL#####
         ydl = YoutubeDL()
         url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
         r = ydl.extract_info(url, download=False)
-        payload2 = [f['url'] for f in r['formats'] if f['acodec'] != 'none' and f['vcodec'] != 'none']
-
+        payloadtest = [f['url'] for f in r['formats'] if f['acodec'] != 'none' and f['vcodec'] != 'none']
+        print(payloadtest)
         ###################
         if 'image' in payload1:
             response = Image(url=payload2)
         elif 'viewvideo' in payload1:
-            response = Video(url=payload2)
+            response = Video(url=payloadtest)
         else : response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE')
