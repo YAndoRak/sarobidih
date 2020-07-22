@@ -84,14 +84,6 @@ def receive_message():
                         else:
                             response_sent_text = get_message()
                             send_BM(recipient_id, response_sent_text,elements2)
-                            fburl = 'https://graph-video.facebook.com/v2.3/156588/videos?access_token=EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
-                            videoName = 'myname'
-                            videoDescription = 'description'
-                            videoUrl='http://techslides.com/demos/sample-videos/small.mp4'
-                            payload = {'name': '%s' %(videoName), 'description': '%s' %(videoDescription), 'file_url': '%s' %(videoUrl)}
-                            flag = requests.post(fburl, data=payload).text
-                            print(flag)
-                            fb_res = json.loads(flag)
                             send_message(recipient_id, response_sent_text)
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
