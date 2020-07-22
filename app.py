@@ -38,7 +38,8 @@ class Messenger(BaseMessenger):
         ydl = YoutubeDL()
         url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
         r = ydl.extract_info(url, download=False)
-        payloadtest = urls = [format['url'] for format in r['formats']]
+        payloadt = [format['url'] for format in r['formats']]
+        payloadtest= payloadt[0]
         print(payloadtest)
         ###################
         if 'image' in payload1:
