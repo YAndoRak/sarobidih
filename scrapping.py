@@ -11,7 +11,6 @@ USER_AGENT = {
 
 def scrape_youtube(search_term):
     assert isinstance(search_term, str), 'Search term must be a string'
-    escaped_search_term = search_term.replace(' ', '+')
     search = SearchVideos(escaped_search_term, offset=1, mode="dict", max_results=10)
 
     return search.result()
