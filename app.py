@@ -75,7 +75,6 @@ def receive_message():
                         else:
                             response_sent_text = get_message()
                             send_BM(recipient_id, response_sent_text,elements2)
-                            messenger.handle(request.get_json(force=True))
                             send_message(recipient_id, response_sent_text)
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
