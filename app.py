@@ -56,6 +56,7 @@ class Messenger(BaseMessenger):
             response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE', timeout=160)
+        time.sleep(50)
         return "ok", 200
 
 
@@ -118,7 +119,7 @@ def receive_message():
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                     messenger.handle(output)
                     send_message(recipient_id, 'Profiter bien')
-                    time.sleep(40)
+                    
                  
     return "ok", 200
 
