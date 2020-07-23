@@ -24,39 +24,6 @@ elements2 =[{
     }]
 ################ fb messenger #################"""
 #
-def process_message(message):
-    response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
-    return response.to_dict()
-
-class Messenger(BaseMessenger):
-    def __init__(self, page_access_token):
-        self.page_access_token = page_access_token
-        super(Messenger, self).__init__(self.page_access_token)
-    def message(self, message):
-        action = process_message(message)
-        res = self.send(action, 'RESPONSE')
-        return "ok", 200
-
-    def postback(self, message):
-        payload = message['postback']['payload'].split()
-        url = find_ydl_url(payload[1])
-        payload2 = url['url']
-        payload1 = payload[0]
-        ####YOUTUBE DL#####
-        #ydl = YoutubeDL()
-        #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
-        #r = ydl.extract_info(url, download=False)
-        #payloadt = [format['url'] for format in r['formats']]
-        #payloadtest= payloadt[0]
-        #print(payloadtest)
-        ###################
-        if 'viewvideo' in payload1:
-            response = Video(url=payload2)
-        else : 
-            response = Text(text='This is an example text message.')
-        action = response.to_dict()
-        self.send(action)
-        return "ok", 200
 
 
 messenger = Messenger(ACCESS_TOKEN)
@@ -112,17 +79,16 @@ def receive_message():
                 if receive_postback[0] == "image":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.handle(output)
+                    sendVideo(output)
 
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.handle(output)
+                    sendVideo(output)
                     send_message(recipient_id, 'Profiter bien')
                  
     return "ok", 200
 
-    
 
 def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
@@ -252,6 +218,45 @@ def send_generic_template_youtube(recipient_id, research_query):
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
     return "successe"
+
+@app.after_request
+def sendVideo(response):
+    messenger.handle(response)
+
+def process_message(message):
+    response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
+    return response.to_dict()
+
+class Messenger(BaseMessenger):
+    def __init__(self, page_access_token):
+        self.page_access_token = page_access_token
+        super(Messenger, self).__init__(self.page_access_token)
+    def message(self, message):
+        action = process_message(message)
+        res = self.send(action, 'RESPONSE')
+        return "ok", 200
+
+    def postback(self, message):
+        payload = message['postback']['payload'].split()
+        url = find_ydl_url(payload[1])
+        payload2 = url['url']
+        payload1 = payload[0]
+        ####YOUTUBE DL#####
+        #ydl = YoutubeDL()
+        #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
+        #r = ydl.extract_info(url, download=False)
+        #payloadt = [format['url'] for format in r['formats']]
+        #payloadtest= payloadt[0]
+        #print(payloadtest)
+        ###################
+        if 'viewvideo' in payload1:
+            response = Video(url=payload2)
+        else : 
+            response = Text(text='This is an example text message.')
+        action = response.to_dict()
+        self.send(action)
+        return "ok", 200
+
 
 if __name__ == "__main__":
     app.run()
