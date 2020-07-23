@@ -49,6 +49,7 @@ class Messenger(BaseMessenger):
         else : response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE')
+        break
         return "success"
 
 messenger = Messenger(ACCESS_TOKEN)
@@ -102,13 +103,11 @@ def receive_message():
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
-                    break
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
                     send_message(recipient_id, 'Profiter bien')
-                    break
     return "Message Processed"
 
 
