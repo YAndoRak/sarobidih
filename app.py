@@ -89,6 +89,7 @@ def receive_message():
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
         if message.get('postback'):
+            recipient_id = message['sender']['id']
             if message['postback'].get('payload'):
                 receive_postback = message['postback'].get('payload').split()
                 if receive_postback[0] == "PDF_view":
@@ -108,6 +109,7 @@ def receive_message():
                     messenger.handle(request.get_json(force=True))
                     send_message(recipient_id, 'Profiter bien')
                     return "200 ok"
+            break
     return "200 ok"
 
 
