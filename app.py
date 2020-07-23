@@ -112,12 +112,12 @@ def receive_message():
                 if receive_postback[0] == "image":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.handle(output)
+                    messenger.postback(output)
 
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.handle(output)
+                    messenger.postback(output)
                     send_message(recipient_id, 'Profiter bien')
                     
                  
