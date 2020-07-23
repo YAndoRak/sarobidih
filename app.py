@@ -26,8 +26,7 @@ elements2 =[{
 ################ fb messenger #################"""
 #
 def process_message(message):
-    msg = message['message']['text'].lower()
-    response = Video(url='http://techslides.com/demos/sample-videos/small.mp4')
+    response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
     return response.to_dict()
 
 class Messenger(BaseMessenger):
@@ -53,7 +52,7 @@ class Messenger(BaseMessenger):
         # if 'image' in payload1:
         #     response = Image(url=payload2)
         if 'viewvideo' in payload1:
-            self.message(payload)
+            self.message(message)
             # response = Video(url=payload2)
         # else : 
         #     response = Text(text='This is an example text message.')
