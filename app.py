@@ -97,8 +97,7 @@ def receive_message():
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
-        print(output['entry'][0])
-        if output['entry'][0]['messaging'][0]['message'].get('postback'):
+        if output['entry'][0]['messaging'][0].get('postback'):
             recipient_id = message['sender']['id']
             if message['postback'].get('payload'):
                 receive_postback = message['postback'].get('payload').split()
