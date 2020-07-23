@@ -70,7 +70,6 @@ def receive_message():
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
-
             for message in messaging:
                 print(message)
                 if message.get('message'):
