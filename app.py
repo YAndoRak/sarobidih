@@ -1,4 +1,4 @@
-import random
+import random, time
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
@@ -118,6 +118,7 @@ def receive_message():
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                     messenger.handle(output)
                     send_message(recipient_id, 'Profiter bien')
+                    time.sleep(40)
                  
     return "ok", 200
 
