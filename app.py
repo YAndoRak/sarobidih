@@ -49,7 +49,7 @@ class Messenger(BaseMessenger):
         else : response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE')
-        
+        return "200 ok"
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
@@ -89,7 +89,6 @@ def receive_message():
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
         if message.get('postback'):
-            recipient_id = message['sender']['id']
             if message['postback'].get('payload'):
                 receive_postback = message['postback'].get('payload').split()
                 if receive_postback[0] == "PDF_view":
@@ -102,12 +101,14 @@ def receive_message():
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
+                    return "200 ok"
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
                     send_message(recipient_id, 'Profiter bien')
-    return "Message Processed"
+                    return "200 ok"
+    return "200 ok"
 
 
 def verify_fb_token(token_sent):
@@ -207,7 +208,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload":"viewvideo http://techslides.com/demos/sample-videos/small.mp4"
+                    "payload":"viewvideo https://brash-lime-enigmosaurus.glitch.me/myvideo.mp4"
                 }
             ]
         })
