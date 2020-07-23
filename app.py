@@ -22,7 +22,6 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
-
 ################ fb messenger #################"""
 #
 def process_message(message):
