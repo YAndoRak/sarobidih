@@ -49,7 +49,7 @@ class Messenger(BaseMessenger):
         else : response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE')
-        
+        return "success"
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
