@@ -66,7 +66,7 @@ def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
-    else:
+    elif request.method == 'POST'::
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
