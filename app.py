@@ -109,7 +109,6 @@ def receive_message():
                     messenger.handle(request.get_json(force=True))
                     send_message(recipient_id, 'Profiter bien')
                     return "200 ok"
-            break
     return "200 ok"
 
 
