@@ -62,7 +62,7 @@ class Messenger(BaseMessenger):
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/webhook", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
