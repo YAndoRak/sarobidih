@@ -22,6 +22,7 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
+i=0
 ################ fb messenger #################"""
 #
 def process_message(message):
@@ -100,27 +101,30 @@ def receive_message():
                         send_message(recipient_id, response_sent_nontext)
 
         if message.get('postback'):
-            recipient_id = message['sender']['id']
-            if message['postback'].get('payload'):
-                receive_postback = message['postback'].get('payload').split()
-                if receive_postback[0] == "PDF_view":
-                    if len(receive_postback) < 2:
-                        send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                    else:
+            if i<=0 :
+                recipient_id = message['sender']['id']
+                if message['postback'].get('payload'):
+                    receive_postback = message['postback'].get('payload').split()
+                    if receive_postback[0] == "PDF_view":
+                        if len(receive_postback) < 2:
+                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                        else:
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                    if receive_postback[0] == "image":
                         response_query = ' '.join(map(str, receive_postback[1:]))
-                        send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-                if receive_postback[0] == "image":
-                    response_query = ' '.join(map(str, receive_postback[1:]))
-                    send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.postback(output)
+                        send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                        messenger.handle(output)
+                        i=8
 
-                if receive_postback[0] == "viewvideo":
-                    response_query = ' '.join(map(str, receive_postback[1:]))
-                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.postback(output)
-                    send_message(recipient_id, 'Profiter bien')
-                    
-                 
+                    if receive_postback[0] == "viewvideo":
+                        response_query = ' '.join(map(str, receive_postback[1:]))
+                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                        messenger.handle(output)
+                        i=8
+                        send_message(recipient_id, 'Profiter bien')
+            else :
+                i=i+1 
     return "ok", 200
 
     
