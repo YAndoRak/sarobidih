@@ -22,7 +22,6 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
-i=0
 ################ fb messenger #################"""
 #
 def process_message(message):
@@ -63,6 +62,7 @@ class Messenger(BaseMessenger):
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
+i=int(0)
 @app.route("/webhook", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
@@ -101,7 +101,7 @@ def receive_message():
                         send_message(recipient_id, response_sent_nontext)
 
         if message.get('postback'):
-            if i<=0 :
+            if (i<=0) :
                 recipient_id = message['sender']['id']
                 if message['postback'].get('payload'):
                     receive_postback = message['postback'].get('payload').split()
