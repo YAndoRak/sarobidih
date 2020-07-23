@@ -6,10 +6,10 @@ from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
-from youtube_dl import YoutubeDL
+from youtubedl import find_ydl_url
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAI1QygXjocBAHbkdNCVBv53GXvCm0IrgFUZAdZCJ5TdhKvyaAYnWx1XpycJCRnIrVAE81FgY0LG3ZAAHZA05E90U4zXX1ZCeYtZCW4pL2yTdgLRlb8omoRPIJPOwftvNQT4r3Gc1D0MpNe4ZBmyjvQsK8eZCejr80kZBWqy3H5yZCqUSMNFVCC6D6'
+ACCESS_TOKEN = 'EAAI1QygXjocBALYA493ZADTYPOOwuoWI9FuNfLQbgQYWTGwdzeQPCIcWTTZAEBin5oFDFZCE7nunxSdfXwZC7u1v5uSI4a8DcLurER90bxgvKHlIkQXdggzyMNRVhtQDxC7xGj7CjhW5AR4Cx839oWFOBotGnG2ss5O8ZBNZC3nZA6z2POfEZASs'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -32,7 +32,8 @@ class Messenger(BaseMessenger):
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        payload2 = payload[1]
+        url = find_ydl_url(payload[1])
+        payload2 = url['url']
         payload1 = payload[0]
         ####YOUTUBE DL#####
         #ydl = YoutubeDL()
@@ -49,7 +50,7 @@ class Messenger(BaseMessenger):
         else : 
             response = Text(text='This is an example text message.')
         action = response.to_dict()
-        self.send(action, 'RESPONSE')
+        self.send(action)
         return "200 ok"
 
 messenger = Messenger(ACCESS_TOKEN)
@@ -63,7 +64,9 @@ def receive_message():
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
+
             for message in messaging:
+                print(message)
                 if message.get('message'):
                     recipient_id = message['sender']['id']
                     if message['message'].get('text'):
@@ -103,13 +106,13 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                             messenger.handle(request.get_json(force=True))
-                            return "200 ok"
+
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                             messenger.handle(request.get_json(force=True))
                             send_message(recipient_id, 'Profiter bien')
-                            return "200 ok"
+
     return "200 ok"
 
 
@@ -210,7 +213,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload":"viewvideo https://brash-lime-enigmosaurus.glitch.me/myvideo.mp4"
+                    "payload":"viewvideo {}".format(result["link"])
                 }
             ]
         })
