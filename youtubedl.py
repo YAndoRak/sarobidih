@@ -16,5 +16,10 @@ else:
     video = result
 
 print(video)
-video_url = video['url']
-print(video_url)
+video_urls = video['formats']
+for video_url in video_urls:
+    print('Extension : {}'.format(video_url['ext']))
+    print('URL : {}'.format(video_url['url']))
+
+
+print(video_urls)
