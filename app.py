@@ -112,17 +112,17 @@ def receive_message():
                 if receive_postback[0] == "image":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.handle(request.get_json(force=True))
+                    messenger.handle(output)
 
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.handle(request.get_json(force=True))
+                    messenger.handle(output)
                     send_message(recipient_id, 'Profiter bien')
                  
     return "ok", 200
 
-
+    
 
 def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
