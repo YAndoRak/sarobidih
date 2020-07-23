@@ -56,13 +56,11 @@ class Messenger(BaseMessenger):
             response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE', timeout=160)
-        time.sleep(50)
         return "ok", 200
 
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
-i=int(0)
 @app.route("/webhook", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
@@ -100,31 +98,28 @@ def receive_message():
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
 
-        if message.get('postback'):
-            if (i<=0) :
-                recipient_id = message['sender']['id']
-                if message['postback'].get('payload'):
-                    receive_postback = message['postback'].get('payload').split()
-                    if receive_postback[0] == "PDF_view":
-                        if len(receive_postback) < 2:
-                            send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_postback[1:]))
-                            send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-                    if receive_postback[0] == "image":
+        if output['entry']['messaging']['message'].get('postback'):
+            recipient_id = message['sender']['id']
+            if message['postback'].get('payload'):
+                receive_postback = message['postback'].get('payload').split()
+                if receive_postback[0] == "PDF_view":
+                    if len(receive_postback) < 2:
+                        send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                    else:
                         response_query = ' '.join(map(str, receive_postback[1:]))
-                        send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                        messenger.handle(output)
-                        i=8
+                        send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
+                if receive_postback[0] == "image":
+                    response_query = ' '.join(map(str, receive_postback[1:]))
+                    send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                    messenger.handle(output)
 
-                    if receive_postback[0] == "viewvideo":
-                        response_query = ' '.join(map(str, receive_postback[1:]))
-                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                        messenger.handle(output)
-                        i=8
-                        send_message(recipient_id, 'Profiter bien')
-            else :
-                i=i+1 
+                if receive_postback[0] == "viewvideo":
+                    response_query = ' '.join(map(str, receive_postback[1:]))
+                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                    messenger.handle(output)
+                    send_message(recipient_id, 'Profiter bien')
+                    
+                 
     return "ok", 200
 
     
