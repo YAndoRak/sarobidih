@@ -36,6 +36,7 @@ class Messenger(BaseMessenger):
     def message(self, message):
         action = process_message(message)
         res = self.send(action, 'RESPONSE')
+        return "ok", 200
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
@@ -58,7 +59,7 @@ class Messenger(BaseMessenger):
         #     response = Text(text='This is an example text message.')
         # action = response.to_dict()
         # self.send(action, 'RESPONSE')
-        return "200 ok"
+        return "ok", 200
 
 messenger = Messenger(ACCESS_TOKEN)
 #We will receive messages that Facebook sends our bot at this endpoint 
@@ -111,14 +112,14 @@ def receive_message():
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
-                    return "200 ok"
+
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                     messenger.handle(request.get_json(force=True))
                     send_message(recipient_id, 'Profiter bien')
-                    return "200 ok"
-    return "200 ok"
+                 
+    return "ok", 200
 
 
 def verify_fb_token(token_sent):
@@ -184,7 +185,7 @@ def send_generic_template_google(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url, json=data)
+    resp = requests.post(url, json=data,headers = {'content-type': 'application/json'})
     postback_data = request.get_json()
     return "success"
 
@@ -238,7 +239,7 @@ def send_generic_template_youtube(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url, json=data)
+    resp = requests.post(url, json=data,headers = {'content-type': 'application/json'})
     postback_data = request.get_json()
     return "success"
 
