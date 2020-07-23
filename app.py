@@ -45,7 +45,7 @@ class Messenger(BaseMessenger):
         if 'image' in payload1:
             response = Image(url=payload2)
         elif 'viewvideo' in payload1:
-            response = Video(url=payloadtest)
+            response = Video(url=payload2)
         else : response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action, 'RESPONSE')
