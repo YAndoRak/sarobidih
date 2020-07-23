@@ -39,9 +39,13 @@ class Messenger(BaseMessenger):
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        url = find_ydl_url(payload[1])
-        payload2 = url['url']
-        payload1 = payload[0]
+        if(self.tmp==payload[1]):
+            return "success",200
+        else:
+            url = find_ydl_url(payload[1])
+            self.tmp= payload[1]
+            payload2 = url['url']
+            payload1 = payload[0]
         ####YOUTUBE DL#####
         #ydl = YoutubeDL()
         #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
@@ -50,13 +54,13 @@ class Messenger(BaseMessenger):
         #payloadtest= payloadt[0]
         #print(payloadtest)
         ###################
-        if 'viewvideo' in payload1:
-            response = Video(url=payload2)
-        else : 
-            response = Text(text='This is an example text message.')
-        action = response.to_dict()
-        self.send(action, 'RESPONSE', timeout=160)
-        return "ok", 200
+            if 'viewvideo' in payload1:
+                response = Video(url=payload2)
+            else :
+                response = Text(text='This is an example text message.')
+            action = response.to_dict()
+            self.send(action, 'RESPONSE', timeout=120)
+        return "success", 200
 
 
 messenger = Messenger(ACCESS_TOKEN)
@@ -119,7 +123,7 @@ def receive_message():
                     send_message(recipient_id, 'Profiter bien')
                     
                  
-    return "ok", 200
+    return "success", 200
 
     
 
@@ -188,7 +192,7 @@ def send_generic_template_google(recipient_id, research_query):
     }
     resp = requests.post(url, json=data,headers = {'content-type': 'application/json'})
     postback_data = request.get_json()
-    return "success"
+    return "success", 200
 
 
 def send_generic_template_youtube(recipient_id, research_query):
@@ -243,7 +247,7 @@ def send_generic_template_youtube(recipient_id, research_query):
     }
     resp = requests.post(url, json=data,headers = {'content-type': 'application/json'})
     postback_data = request.get_json()
-    return "success"
+    return "success", 200
 
 
 
