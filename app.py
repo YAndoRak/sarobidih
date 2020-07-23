@@ -207,7 +207,7 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload":"viewvideo http://techslides.com/demos/sample-videos/small.mp4"
+                    "payload":"viewvideo https://brash-lime-enigmosaurus.glitch.me/myvideo.mp4"
                 }
             ]
         })
