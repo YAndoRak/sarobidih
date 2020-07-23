@@ -34,7 +34,7 @@ class Messenger(BaseMessenger):
         super(Messenger, self).__init__(self.page_access_token)
     def message(self, message):
         action = process_message(message)
-        res = self.send(action, 'RESPONSE')
+        res = self.send(action, 'RESPONSE', timeout=60)
         return "ok", 200
 
     def postback(self, message):
@@ -55,7 +55,7 @@ class Messenger(BaseMessenger):
         else : 
             response = Text(text='This is an example text message.')
         action = response.to_dict()
-        self.send(action)
+        self.send(action, 'RESPONSE', timeout=60)
         return "ok", 200
 
 
