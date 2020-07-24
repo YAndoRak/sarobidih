@@ -200,7 +200,7 @@ def send_generic_template_google(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url, json=data,headers={'200 ': 'OK'})
+    resp = requests.post(url,headers = {"Content-Type": "application/json"}, json=data)
     postback_data = request.get_json()
     return "success", 200
 
@@ -255,7 +255,7 @@ def send_generic_template_youtube(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url, json=data,headers={'200 ': 'OK'})
+    resp = requests.post(url, headers = {"Content-Type": "application/json"},json=data)
     postback_data = request.get_json()
     return "success", 200
 
