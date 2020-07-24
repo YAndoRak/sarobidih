@@ -1,4 +1,4 @@
-import random, time
+import random
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
@@ -7,9 +7,11 @@ from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
 from youtubedl import find_ydl_url
+import threading
+import atexit
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
+ACCESS_TOKEN = 'EAAI1QygXjocBAMTJIaRwmoRZA96loAeu6pjpnj7pp7RQrj2BeGshmEJjlfZA4XZBrgi4wZBZAQrmYXvVC1Xq4ufuSbhDSTy2DWKZBwJVe7ObpztXoDjccjST8klWNdDMgGLb8E99xYZB8F3blt3fEvYstTiKKKPFqT7jjyu0zlZALUI8eIHuF2bh'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -22,7 +24,7 @@ elements2 =[{
   "title":"Jao's phone",
   "payload":"+261329125857"
     }]
-############### fb messenger #################"""
+################ fb messenger #################"""
 #
 def process_message(message):
     response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
@@ -31,27 +33,17 @@ def process_message(message):
 class Messenger(BaseMessenger):
     def __init__(self, page_access_token):
         self.page_access_token = page_access_token
-        self.tmp=""
-        self.temp=""
         super(Messenger, self).__init__(self.page_access_token)
     def message(self, message):
         action = process_message(message)
-        res = self.send(action, 'RESPONSE', timeout=1200)
+        res = self.send(action, 'RESPONSE')
         return "ok", 200
-    def temponread(self):
-        return self.temp
-    def temponwrite(self,valeur):
-        self.temp=valeur
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        if(self.tmp==payload[1]):
-            return "success",200
-        else:
-            url = find_ydl_url(payload[1])
-            self.tmp= payload[1]
-            payload2 = url['url']
-            payload1 = payload[0]
+        url = find_ydl_url(payload[1])
+        payload2 = url['url']
+        payload1 = payload[0]
         ####YOUTUBE DL#####
         #ydl = YoutubeDL()
         #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
@@ -60,26 +52,33 @@ class Messenger(BaseMessenger):
         #payloadtest= payloadt[0]
         #print(payloadtest)
         ###################
-            if 'viewvideo' in payload1:
-                response = Video(url=payload2)
-            else :
-                response = Text(text='This is an example text message.')
-            action = response.to_dict()
-            self.send(action, 'RESPONSE', timeout=1200)
-        return "success"
+        if 'viewvideo' in payload1:
+            response = Video(url=payload2)
+        else :
+            response = Text(text='This is an example text message.')
+        action = response.to_dict()
+        self.send(action)
+        return "ok", 200
 
 
 messenger = Messenger(ACCESS_TOKEN)
-#We will receive messages that Facebook sends our bot at this endpoint 
-@app.route("/webhook", methods=['GET', 'POST'])
-def index():
+
+POOL_TIME = 300 #Seconds
+dataLock = threading.Lock()
+# thread handler
+yourThread = threading.Thread()
+
+#We will receive messages that Facebook sends our bot at this endpoint
+@app.route("/", methods=['GET', 'POST'])
+def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
-    elif request.method == 'POST':
+    else:
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
+
             for message in messaging:
                 print(message)
                 if message.get('message'):
@@ -107,7 +106,8 @@ def index():
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
-        if output['entry'][0]['messaging'][0].get('postback'):
+
+        if message.get('postback'):
             recipient_id = message['sender']['id']
             if message['postback'].get('payload'):
                 receive_postback = message['postback'].get('payload').split()
@@ -120,23 +120,33 @@ def index():
                 if receive_postback[0] == "image":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.handle(output)
+                    messenger.handle(request.get_json(force=True))
 
-                if(messenger.temponread()==receive_postback[1]):
-                    return "success", 200
-                else :
-                    if receive_postback[0] == "viewvideo":
-                        response_query = ' '.join(map(str, receive_postback[1:]))
+                if receive_postback[0] == "viewvideo":
+                    response_query = ' '.join(map(str, receive_postback[1:]))
+                    with dataLock:
                         send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                        messenger.temponwrite(receive_postback[1])
-                        messenger.handle(output)
+                        messenger.handle(request.get_json(force=True))
                         send_message(recipient_id, 'Profiter bien')
-                    
-                 
-    return "success", 200
+                        atexit.register(interrupt)
+                        atexit.unregister
+                    atexit.register(interrupt)
+                    atexit.unregister
+                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
 
-    
+                    yourThread.start()
 
+                    return 'start'
+
+
+    return "ok", 200
+
+def interrupt():
+    global yourThread
+    yourThread.cancel()
+    print('all done')
+def timeout():
+    return 'temps écouler'
 def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
@@ -202,7 +212,7 @@ def send_generic_template_google(recipient_id, research_query):
     }
     resp = requests.post(url,headers = {"Content-Type": "application/json"}, json=data)
     postback_data = request.get_json()
-    return "success", 200
+    return "success"
 
 
 def send_generic_template_youtube(recipient_id, research_query):
@@ -257,7 +267,7 @@ def send_generic_template_youtube(recipient_id, research_query):
     }
     resp = requests.post(url, headers = {"Content-Type": "application/json"},json=data)
     postback_data = request.get_json()
-    return "success", 200
+    return "success"
 
 
 
