@@ -66,7 +66,7 @@ class Messenger(BaseMessenger):
                 response = Text(text='This is an example text message.')
             action = response.to_dict()
             self.send(action, 'RESPONSE', timeout=120)
-        return "success", 200
+        return "success"
 
 
 messenger = Messenger(ACCESS_TOKEN)
