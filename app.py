@@ -7,9 +7,11 @@ from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
 from youtubedl import find_ydl_url
+import threading
+import atexit
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAI1QygXjocBALYA493ZADTYPOOwuoWI9FuNfLQbgQYWTGwdzeQPCIcWTTZAEBin5oFDFZCE7nunxSdfXwZC7u1v5uSI4a8DcLurER90bxgvKHlIkQXdggzyMNRVhtQDxC7xGj7CjhW5AR4Cx839oWFOBotGnG2ss5O8ZBNZC3nZA6z2POfEZASs'
+ACCESS_TOKEN = 'EAAI1QygXjocBAMTJIaRwmoRZA96loAeu6pjpnj7pp7RQrj2BeGshmEJjlfZA4XZBrgi4wZBZAQrmYXvVC1Xq4ufuSbhDSTy2DWKZBwJVe7ObpztXoDjccjST8klWNdDMgGLb8E99xYZB8F3blt3fEvYstTiKKKPFqT7jjyu0zlZALUI8eIHuF2bh'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -52,7 +54,7 @@ class Messenger(BaseMessenger):
         ###################
         if 'viewvideo' in payload1:
             response = Video(url=payload2)
-        else : 
+        else :
             response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action)
@@ -60,7 +62,13 @@ class Messenger(BaseMessenger):
 
 
 messenger = Messenger(ACCESS_TOKEN)
-#We will receive messages that Facebook sends our bot at this endpoint 
+
+POOL_TIME = 300 #Seconds
+dataLock = threading.Lock()
+# thread handler
+yourThread = threading.Thread()
+
+#We will receive messages that Facebook sends our bot at this endpoint
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
@@ -116,14 +124,29 @@ def receive_message():
 
                 if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
-                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.handle(request.get_json(force=True))
-                    send_message(recipient_id, 'Profiter bien')
-                 
+                    with dataLock:
+                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                        messenger.handle(request.get_json(force=True))
+                        send_message(recipient_id, 'Profiter bien')
+                        atexit.register(interrupt)
+                        atexit.unregister
+                    atexit.register(interrupt)
+                    atexit.unregister
+                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+
+                    yourThread.start()
+
+                    return 'start'
+
+
     return "ok", 200
 
-
-
+def interrupt():
+    global yourThread
+    yourThread.cancel()
+    print('all done')
+def timeout():
+    return 'temps écouler'
 def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
@@ -251,7 +274,7 @@ def send_generic_template_youtube(recipient_id, research_query):
 
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
-    return "successe"
+    return "success"
 
 if __name__ == "__main__":
     app.run()
