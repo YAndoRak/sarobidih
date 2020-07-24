@@ -40,6 +40,8 @@ class Messenger(BaseMessenger):
         return "ok", 200
 
     def postback(self, message):
+        messages = message['messaging'].get('message')
+        recipient_id = messages['sender']['id']
         send_message(recipient_id, 'Debut du telechargement')
         payload = message['postback']['payload'].split()
         url = find_ydl_url(payload[1])
