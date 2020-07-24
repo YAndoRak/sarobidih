@@ -126,11 +126,11 @@ def receive_message():
                     return "success", 200
                 else :
                     if receive_postback[0] == "viewvideo":
-                    response_query = ' '.join(map(str, receive_postback[1:]))
-                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                    messenger.temponwrite(receive_postback[1])
-                    messenger.handle(output)
-                    send_message(recipient_id, 'Profiter bien')
+                        response_query = ' '.join(map(str, receive_postback[1:]))
+                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                        messenger.temponwrite(receive_postback[1])
+                        messenger.handle(output)
+                        send_message(recipient_id, 'Profiter bien')
                     
                  
     return "success", 200
