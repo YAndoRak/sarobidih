@@ -31,6 +31,7 @@ def process_message(message):
 class Messenger(BaseMessenger):
     def __init__(self, page_access_token):
         self.page_access_token = page_access_token
+        self.tmp=""
         super(Messenger, self).__init__(self.page_access_token)
     def message(self, message):
         action = process_message(message)
@@ -254,7 +255,7 @@ def send_generic_template_youtube(recipient_id, research_query):
 
 def send_BM(recipient_id, response_sent_text,element):
     bot.send_button_message(recipient_id, response_sent_text,element)
-    return "successe"
+    return "success"
 
 if __name__ == "__main__":
     app.run()
