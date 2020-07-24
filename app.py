@@ -32,11 +32,16 @@ class Messenger(BaseMessenger):
     def __init__(self, page_access_token):
         self.page_access_token = page_access_token
         self.tmp=""
+        self.temp=""
         super(Messenger, self).__init__(self.page_access_token)
     def message(self, message):
         action = process_message(message)
         res = self.send(action, 'RESPONSE', timeout=160)
         return "ok", 200
+    def temponread(self):
+        return self.temp
+    def temponwrite(self,valeur):
+        self.temp=valeur
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
@@ -117,9 +122,13 @@ def receive_message():
                     send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                     messenger.handle(output)
 
-                if receive_postback[0] == "viewvideo":
+                if(messenger.temponread()==receive_postback[1]):
+                    return "success", 200
+                else :
+                    if receive_postback[0] == "viewvideo":
                     response_query = ' '.join(map(str, receive_postback[1:]))
                     send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                    messenger.temponwrite(receive_postback[1])
                     messenger.handle(output)
                     send_message(recipient_id, 'Profiter bien')
                     
