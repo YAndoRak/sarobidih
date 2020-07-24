@@ -136,6 +136,7 @@ def receive_message():
                     yourThread = threading.Timer(POOL_TIME, timeout(), ())
 
                     yourThread.start()
+                    send_message(recipient_id, 'Commencement')
 
                     return 'start'
 
