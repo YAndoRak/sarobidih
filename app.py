@@ -144,8 +144,8 @@ def receive_message():
                                 send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                                 #messenger.handle(request.get_json(force=True))
                                 audio_url = find_audio_url(receive_postback[1])
-                                print("lURL EST", audio_url)
-                                upload_audio_fb(recipient_id, audio_url['url'])
+                                attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
+                                upload_audio_attachements(recipient_id, attachmentID)
                                 send_message(recipient_id, 'Profiter bien')
 
                             request_check['previous'] = request_check['recent']
@@ -221,8 +221,7 @@ def upload_audio_fb(recipient_id, audio_url):
     headers = {"Content-Type": "application/json"},
     json=payload)
     rep = json.loads(reponse.text)
-    print(rep)
-    upload_audio_attachements(recipient_id, rep.get('attachment_id'))
+    return rep.get('attachment_id')
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
