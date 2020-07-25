@@ -218,7 +218,7 @@ def upload_audio_fb(recipient_id):
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
-    upload_audio_attachements(reponse.content.get('attachement_id'))
+    upload_audio_attachements(reponse.content)
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
