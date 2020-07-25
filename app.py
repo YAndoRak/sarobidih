@@ -143,7 +143,8 @@ def receive_message():
                             if (request_check['previous'] != request_check['recent']):
                                 send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
                                 #messenger.handle(request.get_json(force=True))
-                                upload_audio_fb(recipient_id)
+                                audio_url = find_audio_url(receive_postback[1])
+                                upload_audio_fb(recipient_id, audio_url['url'])
                                 send_message(recipient_id, 'Profiter bien')
 
                             request_check['previous'] = request_check['recent']
@@ -200,7 +201,7 @@ def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-def upload_audio_fb(recipient_id):
+def upload_audio_fb(recipient_id, audio_url):
     payload ={ 
     "recipient":{
       "id":recipient_id
@@ -209,7 +210,7 @@ def upload_audio_fb(recipient_id):
     "attachment":{
       "type":"audio", 
         "payload":{
-            "url": 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3',
+            "url": audio_url,
             "is_reusable":"True",
         }
         }
