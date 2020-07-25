@@ -220,7 +220,7 @@ def upload_audio_fb(recipient_id):
     json=payload)
     rep = json.loads(reponse.text)
     print(rep)
-    upload_audio_attachements(rep.get('attachment_id'))
+    upload_audio_attachements(recipient_id, rep.get('attachment_id'))
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
