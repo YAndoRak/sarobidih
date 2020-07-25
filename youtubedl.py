@@ -37,7 +37,7 @@ def find_audio_url(url_audio):
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         result = ydl.extract_info(url_audio, download=False)
     if 'entries' in result:
-        audio = result['entries'][0]
+        audios = result['entries'][0]
     else:
         audios = result
     audios['formats']
