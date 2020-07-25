@@ -6,7 +6,7 @@ from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
-from youtubedl import find_ydl_url
+from youtubedl import find_ydl_url, find_audio_url
 import threading
 import atexit
 
@@ -45,19 +45,16 @@ class Messenger(BaseMessenger):
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
-        url = find_ydl_url(payload[1])
-        payload2 = url['url']
+        url_video = find_ydl_url(payload[1])
+        url_audio = find_audio_url(payload[1])
+        payload2 = url_video['url']
         payload1 = payload[0]
-        ####YOUTUBE DL#####
-        # ydl = YoutubeDL()
-        # url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
-        # r = ydl.extract_info(url, download=False)
-        # payloadt = [format['url'] for format in r['formats']]
-        # payloadtest= payloadt[0]
-        # print(payloadtest)
-        ###################
+        payload3 = url_audio['url']
+
         if 'viewvideo' in payload1:
             response = Video(url=payload2)
+        elif 'viewaudio' in payload1:
+            response = Image(url=payload3)
         else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
@@ -71,7 +68,7 @@ messenger = Messenger(ACCESS_TOKEN)
 
 POOL_TIME = 300  # Seconds
 dataLock = threading.Lock()
-sem = threading.Semaphore()
+sem = threading. Semaphore()
 # thread handler
 yourThread = threading.Thread()
 
@@ -135,7 +132,24 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                             messenger.handle(request.get_json(force=True))
+                        if receive_postback[0] == "viewaudio":
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            request_check['recent'] = response_query
+                            print(
+                                '======================================request check=====================================')
+                            print(request_check)
+                            print(
+                                '======================================request check=====================================')
+                            if (request_check['previous'] != request_check['recent']):
+                                send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                messenger.handle(request.get_json(force=True))
+                                send_message(recipient_id, 'Profiter bien')
 
+                            request_check['previous'] = request_check['recent']
+                            request_check['recent'] = ''
+                            print('=============================== verify ==============================')
+                            print(request_check)
+                            print('=============================== verify ==============================')
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             request_check['recent'] = response_query
@@ -262,15 +276,16 @@ def send_generic_template_youtube(recipient_id, research_query):
                 },
                 {
                     "type": "postback",
-                    "title": "Télecharger",
-                    "payload": "image https://unsplash.it/300/200/?random"
+                    "title": "Ecouter Ici",
+                    "payload": "viewaudio {}".format(result["link"])
                 },
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
                     "payload": "viewvideo {}".format(result["link"])
+                },
 
-                }
+
             ]
         })
     extra_data = {
