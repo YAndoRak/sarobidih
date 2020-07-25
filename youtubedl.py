@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 import youtube_dl
 ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 def find_ydl_url(url):
@@ -25,28 +24,28 @@ def find_ydl_url(url):
             print('=================================== 360 P ====================================')
             return video_url
 def find_audio_url(url_audio):
-    with ydl:
-        result = ydl.extract_info(
+    with ydlaudio:
+        resultaudio = ydlaudio.extract_info(
             url_audio,
             download=False # We just want to extract the info
         )
 
-    if 'entries' in result:
-        video = result['entries'][0]
+    if 'entries' in resultaudio:
+        audio = resultaudio['entries'][0]
     else:
-        video = result
+        audio = resultaudio
 
-    video_urls = video['formats']
-    for video_url in video_urls:
-        if video_url['ext'] == 'm4a' :
-            print('=================================== 360 P ====================================')
-            print('Extension : {}'.format(video_url['ext']))
-            print('URL : {}'.format(video_url['url']))
-            print('Fomart ID: {}'.format(video_url['format_id']))
-            print('Fomart : {}'.format(video_url['format']))
-            print('Filesize : {}'.format(video_url['filesize']))
-            print('=================================== 360 P ====================================')
-            return video_url
+    audio_urls = audio['formats']
+    for audio_url in audio_urls:
+        if audio_url['ext'] == 'm4a' :
+            print('=================================== M4a ====================================')
+            print('Extension : {}'.format(audio_url['ext']))
+            print('URL : {}'.format(audio_url['url']))
+            print('Fomart ID: {}'.format(audio_url['format_id']))
+            print('Fomart : {}'.format(audio_url['format']))
+            print('Filesize : {}'.format(audio_url['filesize']))
+            print('=================================== M4a ====================================')
+            return audio_url
 #     ydl_opts = {
 #     'format': 'bestaudio/best',
 #     'postprocessors': [{
