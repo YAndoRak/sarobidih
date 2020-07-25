@@ -40,5 +40,14 @@ def find_audio_url(url_audio):
     if 'entries' in result:
         audio = result['entries'][0]
     else:
-        audio = result
-    return audio['formats'][0]['url']
+        audios = result
+    for audio in audios:
+        print('=================================== 360 P ====================================')
+        print('Extension : {}'.format(audio['ext']))
+        print('URL : {}'.format(audio['url']))
+        print('Fomart ID: {}'.format(audio['format_id']))
+        print('Fomart : {}'.format(audio['format']))
+        print('Filesize : {}'.format(audio['filesize']))
+        print('=================================== 360 P ====================================')
+    print(audios['formats'])
+    return audios['formats'][0]['url']
