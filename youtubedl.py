@@ -27,7 +27,12 @@ def find_ydl_url(url):
 
 def find_audio_url(url_audio):
     ydl_opts = {
-    'format': 'bestaudio',
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
     }
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -36,4 +41,4 @@ def find_audio_url(url_audio):
         audio = result['entries'][0]
     else:
         audio = result
-    return audio['formats'][0]
+    return audio['formats'][0]['url']
