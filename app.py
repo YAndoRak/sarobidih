@@ -11,7 +11,7 @@ import threading
 import atexit
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAFIvOnSw5u7WIFkC5ZA7NSfCgSvziYhZBr3cUVlZBm4DZBiY4ZB0SYAT0ZBIXXJZCmBujX0OxZCiESbqZAw34xZC7KXT03DJZCpK0SxAi1nIJpN0AmU7LFd0rnNktcTW76XoqHxZAKPBV4ZCEEnRx5KYiFZC1hUSeINMSTKaZBYuNEil1P2'
+ACCESS_TOKEN = 'EAAI1QygXjocBAG20asJQEyxcOYTOAtP3Tk7mc8ScTe9eDJN9Yd6ZAP3v0NsNQeDp4nkDPnFK7kucZAZCmBmSGjcviTGk4GS0iZCRSsvZAgzomCdmaqx8D1fLhi4TLEmePzutp6HRIh6H3FlgsRz59SogSg5sZA9b3hWKzDPeJA5rVScWDQuktl'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -19,69 +19,74 @@ bot = Bot(ACCESS_TOKEN)
 #             "url":"https://www.messenger.com",
 #             "title":"Visit Messenger"
 #           }]
-elements2 =[{
-  "type":"phone_number",
-  "title":"Jao's phone",
-  "payload":"+261329125857"
-    }]
+elements2 = [{
+    "type": "phone_number",
+    "title": "Jao's phone",
+    "payload": "+261329125857"
+}]
+
+
 ################ fb messenger #################"""
 #
 def process_message(message):
     response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
     return response.to_dict()
 
+
 class Messenger(BaseMessenger):
     def __init__(self, page_access_token):
         self.page_access_token = page_access_token
         super(Messenger, self).__init__(self.page_access_token)
+
     def message(self, message):
         action = process_message(message)
         res = self.send(action, 'RESPONSE')
         return "ok", 200
 
     def postback(self, message):
-        messages = message['messaging'].get('message')
-        recipient_id = messages['sender']['id']
-        send_message(recipient_id, 'Debut du telechargement')
         payload = message['postback']['payload'].split()
         url = find_ydl_url(payload[1])
         payload2 = url['url']
         payload1 = payload[0]
         ####YOUTUBE DL#####
-        #ydl = YoutubeDL()
-        #url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
-        #r = ydl.extract_info(url, download=False)
-        #payloadt = [format['url'] for format in r['formats']]
-        #payloadtest= payloadt[0]
-        #print(payloadtest)
+        # ydl = YoutubeDL()
+        # url = "https://www.youtube.com/watch?v=Cfv7qHMeNS4"
+        # r = ydl.extract_info(url, download=False)
+        # payloadt = [format['url'] for format in r['formats']]
+        # payloadtest= payloadt[0]
+        # print(payloadtest)
         ###################
         if 'viewvideo' in payload1:
             response = Video(url=payload2)
-        else :
+        else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action)
         return "ok", 200
 
 
+request_check = {'previous': '', 'recent': ''}
+
 messenger = Messenger(ACCESS_TOKEN)
 
-POOL_TIME = 300 #Seconds
+POOL_TIME = 300  # Seconds
 dataLock = threading.Lock()
+sem = threading.Semaphore()
 # thread handler
 yourThread = threading.Thread()
 
-#We will receive messages that Facebook sends our bot at this endpoint
+
+# We will receive messages that Facebook sends our bot at this endpoint
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
     else:
+        sem.acquire()
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
-
             for message in messaging:
                 print(message)
                 if message.get('message'):
@@ -90,81 +95,95 @@ def receive_message():
                         receive_message = message['message'].get('text').split()
                         if (receive_message[0] == "search_google"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
+                                send_message(recipient_id,
+                                             'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id, 'ok, research google {} en cours ....'.format(response_query))
+                                send_message(recipient_id,
+                                             'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
                         if (receive_message[0] == "search_youtube"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
+                                send_message(recipient_id,
+                                             'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id, 'ok, research youtube {} en cours ....'.format(response_query))
+                                send_message(recipient_id,
+                                             'ok, research youtube {} en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
                         else:
                             response_sent_text = get_message()
-                            send_BM(recipient_id, response_sent_text,elements2)
+                            send_BM(recipient_id, response_sent_text, elements2)
                             send_message(recipient_id, response_sent_text)
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
 
-        if message.get('postback'):
-            recipient_id = message['sender']['id']
-            if message['postback'].get('payload'):
-                receive_postback = message['postback'].get('payload').split()
-                if receive_postback[0] == "PDF_view":
-                    if len(receive_postback) < 2:
-                        send_message(recipient_id, 'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
-                    else:
-                        response_query = ' '.join(map(str, receive_postback[1:]))
-                        send_message(recipient_id, 'ok, transcription to PDF {} en cours ....'.format(response_query))
-                if receive_postback[0] == "image":
-                    response_query = ' '.join(map(str, receive_postback[1:]))
-                    send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
-                    messenger.handle(request.get_json(force=True))
+                if message.get('postback'):
+                    recipient_id = message['sender']['id']
+                    if message['postback'].get('payload'):
+                        receive_postback = message['postback'].get('payload').split()
+                        if receive_postback[0] == "PDF_view":
+                            if len(receive_postback) < 2:
+                                send_message(recipient_id,
+                                             'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                send_message(recipient_id,
+                                             'ok, transcription to PDF {} en cours ....'.format(response_query))
+                        if receive_postback[0] == "image":
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
+                            messenger.handle(request.get_json(force=True))
 
-                if receive_postback[0] == "viewvideo":
-                    response_query = ' '.join(map(str, receive_postback[1:]))
-                    with dataLock:
-                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                        messenger.handle(request.get_json(force=True))
-                        send_message(recipient_id, 'Profiter bien')
-                        atexit.register(interrupt)
-                        atexit.unregister
-                    atexit.register(interrupt)
-                    atexit.unregister
-                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                        if receive_postback[0] == "viewvideo":
+                            response_query = ' '.join(map(str, receive_postback[1:]))
+                            request_check['recent'] = response_query
+                            print('======================================request check=====================================')
+                            print (request_check)
+                            print('======================================request check=====================================')
+                            if (request_check['previous'] != request_check['recent']):
+                                send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                messenger.handle(request.get_json(force=True))
+                                send_message(recipient_id, 'Profiter bien')
 
-                    yourThread.start()
-                    send_message(recipient_id, 'Commencement')
+                            request_check['previous'] = request_check['recent']
+                            request_check['recent'] = ''
+                            print('=============================== verify ==============================')
+                            print(request_check)
+                            print('=============================== verify ==============================')
 
-                    return 'start'
 
+    sem.release()
 
     return "ok", 200
+
 
 def interrupt():
     global yourThread
     yourThread.cancel()
-    print('all done')
+
+
+
 def timeout():
     return 'temps écouler'
+
+
 def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
     return 'Invalid verification token'
 
+
 def get_message():
-    sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
+    sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!",
+                        "We're greatful to know you :)"]
     return random.choice(sample_responses)
+
 
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
-
-
 
 
 # def send_message_video(recipien_id, response):
@@ -172,7 +191,7 @@ def send_message(recipient_id, response):
 #     return "success"
 
 def send_generic_template_google(recipient_id, research_query):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
+    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
     payload = []
     for result in results:
@@ -214,13 +233,13 @@ def send_generic_template_google(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url,headers = {"Content-Type": "application/json"}, json=data)
+    resp = requests.post(url, headers={"Content-Type": "application/json"}, json=data)
     postback_data = request.get_json()
     return "success"
 
 
 def send_generic_template_youtube(recipient_id, research_query):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token="+ACCESS_TOKEN
+    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
     results = scrape_youtube(research_query)
 
     payload = []
@@ -228,7 +247,8 @@ def send_generic_template_youtube(recipient_id, research_query):
         payload.append({
             "title": result["title"],
             "image_url": result['thumbnails'][2],
-            "subtitle": "Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"], result["channel"]),
+            "subtitle": "Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"],
+                                                                         result["channel"]),
             "default_action": {
                 "type": "web_url",
                 "url": "https://google.com",
@@ -243,12 +263,12 @@ def send_generic_template_youtube(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "Télecharger",
-                    "payload":"image https://unsplash.it/300/200/?random"
+                    "payload": "image https://unsplash.it/300/200/?random"
                 },
                 {
                     "type": "postback",
                     "title": "Regarder Ici",
-                    "payload":"viewvideo {}".format(result["link"])
+                    "payload": "viewvideo {}".format(result["link"])
 
                 }
             ]
@@ -269,16 +289,15 @@ def send_generic_template_youtube(recipient_id, research_query):
             "attachment": extra_data["attachment"]
         }
     }
-    resp = requests.post(url, headers = {"Content-Type": "application/json"},json=data)
+    resp = requests.post(url, headers={"Content-Type": "application/json"}, json=data)
     postback_data = request.get_json()
     return "success"
 
 
-
-
-def send_BM(recipient_id, response_sent_text,element):
-    bot.send_button_message(recipient_id, response_sent_text,element)
+def send_BM(recipient_id, response_sent_text, element):
+    bot.send_button_message(recipient_id, response_sent_text, element)
     return "success"
+
 
 if __name__ == "__main__":
     app.run()
