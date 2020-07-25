@@ -1,4 +1,4 @@
-import random
+import random, json
 from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
@@ -219,6 +219,7 @@ def upload_audio_fb(recipient_id):
     headers = {"Content-Type": "application/json"},
     json=payload)
     rep = json.loads(reponse.text)
+    print(rep)
     upload_audio_attachements(rep.get('attachment_id'))
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
