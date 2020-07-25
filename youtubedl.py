@@ -24,7 +24,6 @@ def find_ydl_url(url):
             print('Filesize : {}'.format(video_url['filesize']))
             print('=================================== 360 P ====================================')
             return video_url
-
 def find_audio_url(url_audio):
     ydl_opts = {
     'format': 'bestaudio/best',
@@ -41,6 +40,7 @@ def find_audio_url(url_audio):
         audio = result['entries'][0]
     else:
         audios = result
+    audios['formats']
     for audio in audios:
         print('=================================== 360 P ====================================')
         print('Extension : {}'.format(audio['ext']))
