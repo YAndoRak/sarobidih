@@ -201,8 +201,7 @@ def send_message(recipient_id, response):
     return "success"
 
 def upload_audio_fb(recipient_id):
-    payload =[{ 
-    "messaging_type": "RESPONSE",
+    payload ={ 
     "recipient":{
       "id":recipient_id
     },
@@ -210,13 +209,14 @@ def upload_audio_fb(recipient_id):
     "attachment":{
       "type":"audio", 
         "payload":{
-            'is_reusable':true, 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'
+            "url": 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3',
+            "is_reusable":true,
         }
         }
-    }}]
+    }}
     videme = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
     params={"access_token": ACCESS_TOKEN},
-    data=payload, headers = {"Content-Type": "application/json"})
+    json=payload, headers = {"Content-Type": "application/json"})
     print(videme.content)
     app.logger.debug(videme.content)
     #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
