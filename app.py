@@ -217,9 +217,9 @@ def upload_audio_fb(recipient_id):
     videme = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
     params={"access_token": ACCESS_TOKEN},
     data=payload, headers = {"Content-Type": "application/json"})
-    reponse = videme.get_json()
-    app.logger.debug(reponse)
-    upload_audio_attachements(recipient_id, reponse['message'].get('attachment_id'))
+    print(videme.Response())
+    app.logger.debug(videme.Response())
+    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
 #     return "success"
