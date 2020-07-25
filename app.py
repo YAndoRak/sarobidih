@@ -218,13 +218,14 @@ def upload_audio_fb(recipient_id):
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
-    upload_audio_attachements(reponse.content)
+    rep = json.loads(reponse.text)
+    upload_audio_attachements(rep.get('attachment_id'))
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
 #     return "success"
-def upload_audio_attachements(recipient_id, attachement_id):
+def upload_audio_attachements(recipient_id, attachment_id):
     payload = {
     "recipient":{
       "id":recipient_id
@@ -232,7 +233,7 @@ def upload_audio_attachements(recipient_id, attachement_id):
     "message":{
     "attachment":{
       "type":"audio", 
-      "payload":{"attachment_id": attachement_id}
+      "payload":{"attachment_id": attachment_id}
         }
     }}
     reponse = requests.post("https://graph.facebook.com/v7.0/me/messages",
