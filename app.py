@@ -142,7 +142,8 @@ def receive_message():
                                 '======================================request check=====================================')
                             if (request_check['previous'] != request_check['recent']):
                                 send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                messenger.handle(request.get_json(force=True))
+                                #messenger.handle(request.get_json(force=True))
+                                upload_audio_fb(recipient_id)
                                 send_message(recipient_id, 'Profiter bien')
 
                             request_check['previous'] = request_check['recent']
@@ -199,7 +200,25 @@ def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
 
-
+def upload_audio_fb(recipient_id):
+    payload = data = 
+    "messaging_type": "RESPONSE",
+    "recipient":{
+      "id":recipient_id
+    },
+    "message":{
+    "attachment":{
+      "type":"image", 
+      "payload":{
+        {'is_reusable': 'true', 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'}
+        }
+        }
+    }
+    videme = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
+    params={"access_token": ACCESS_TOKEN},
+    data=payload, headers = {"Content-Type": "application/json"})
+    reponse = videme
+    print(reponse)
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
 #     return "success"
