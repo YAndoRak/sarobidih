@@ -210,7 +210,7 @@ def upload_audio_fb(recipient_id):
     "attachment":{
       "type":"audio", 
       "payload":{
-        'is_reusable': 'true', 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'
+        'is_reusable': true, 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'
         }
         }
     }}
@@ -219,9 +219,26 @@ def upload_audio_fb(recipient_id):
     data=payload, headers = {"Content-Type": "application/json"})
     reponse = videme
     print(reponse)
+    upload_audio_attachements(recipient_id, response['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
 #     return "success"
+def upload_audio_attachements(recipient_id, attachement_id):
+    payload = {
+    "recipient":{
+      "id":recipient_id
+    },
+    "message":{
+    "attachment":{
+      "type":"audio", 
+      "payload":{"attachment_id": attachement_id}
+        }
+    }}
+    videme = requests.post("https://graph.facebook.com/v7.0/me/messages",
+    params={"access_token": ACCESS_TOKEN},
+    data=payload, headers = {"Content-Type": "application/json"})
+    reponse = videme
+    print(reponse)
 
 def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
