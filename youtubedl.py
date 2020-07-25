@@ -36,4 +36,4 @@ def find_audio_url(url_audio):
         audio = result['entries'][0]
     else:
         audio = result
-    return audio['formats'][0]['url']
+    return audio['formats'][0]
