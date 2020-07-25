@@ -216,7 +216,8 @@ def upload_audio_fb(recipient_id):
     }}
     videme = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
     params={"access_token": ACCESS_TOKEN},
-    data=payload, headers = {"Content-Type": "application/json"})
+    headers = {"Content-Type": "application/json"},
+    json=payload)
     print(videme.content)
     app.logger.debug(videme.content)
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
@@ -234,8 +235,11 @@ def upload_audio_attachements(recipient_id, attachement_id):
       "payload":{"attachment_id": attachement_id}
         }
     }}
-    rep = requests.post("https://graph.facebook.com/v7.0/me/messages", headers={"Content-Type": "application/json"}, json=payload)
-    print(rep)
+    videme = requests.post("https://graph.facebook.com/v7.0/me/messages",
+    params={"access_token": ACCESS_TOKEN},
+    data=payload, headers = {"Content-Type": "application/json"})
+    reponse = videme
+    print(reponse)
 
 def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
