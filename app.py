@@ -208,9 +208,9 @@ def upload_audio_fb(recipient_id):
     },
     "message":{
     "attachment":{
-      "type":"image", 
+      "type":"audio", 
       "payload":{
-        {'is_reusable': 'true', 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'}
+        'is_reusable': 'true', 'url': 'http://www.logz.org/fichiers/_mobile_34484_Going-Blind-Court.mp3'
         }
         }
     }}
