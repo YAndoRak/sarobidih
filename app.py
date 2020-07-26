@@ -6,12 +6,13 @@ from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
-from youtubedl import find_ydl_url, find_audio_url
+from youtubedl import find_ydl_url, find_audio_url, download_audio
 import threading
-import atexit
+import os
+from requests_toolbelt import MultipartEncoder
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAIiXXZBZBZAd8BAB4j1XmmTR0nxe1V1n3LcJYZB6HmSoTbEwCURZBrqu4SMj9a9JZBSSiI316IZBK9yyDWYM9gzDXRUe73jvYdSbzzfcaruDvaNyCuHymK8ZCnVFcpOdArZAJZCWpgVtYcCW7jgTYMgFTZCZCNKStwO8wIdZCF9EqFxirQjtdbJS9G0X'
+ACCESS_TOKEN = 'EAAI1QygXjocBAJOvCJn02tQpx115pFF1GQvVjzZCQ01NSRuviVytF1t6ZAF8WTZAZAR7sXDfFQzHdDuqlQv4E7DKgul0bObLDz0z8iQngdUTubMZAZCrhPY3oiGnwP8YcnSvTs8aPZCpViTUu5jxJjgdEY3mVJakLSUH2OatZBbIhrH55p833FMt'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 # elements =[{
@@ -46,15 +47,12 @@ class Messenger(BaseMessenger):
     def postback(self, message):
         payload = message['postback']['payload'].split()
         url_video = find_ydl_url(payload[1])
-        url_audio = find_audio_url(payload[1])
         payload2 = url_video['url']
         payload1 = payload[0]
-        payload3 = url_audio['url']
+
 
         if 'viewvideo' in payload1:
             response = Video(url=payload2)
-        elif 'viewaudio' in payload1:
-            response = Image(url=payload3)
         else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
@@ -101,12 +99,10 @@ def receive_message():
                                 send_generic_template_google(recipient_id, response_query)
                         if (receive_message[0] == "search_youtube"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id,
-                                             'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id,
-                                             'ok, research youtube {} en cours ....'.format(response_query))
+                                send_message(recipient_id,'ok, research youtube {} en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
                         else:
                             response_sent_text = get_message()
@@ -135,18 +131,18 @@ def receive_message():
                         if receive_postback[0] == "viewaudio":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             request_check['recent'] = response_query
-                            print(
-                                '======================================request check=====================================')
+                            print( '======================================request check=====================================')
                             print(request_check)
-                            print(
-                                '======================================request check=====================================')
+                            print( '======================================request check=====================================')
                             if (request_check['previous'] != request_check['recent']):
                                 send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                #messenger.handle(request.get_json(force=True))
-                                audio_url = find_audio_url(receive_postback[1])
-                                attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
-                                upload_audio_attachements(recipient_id, attachmentID)
+                                audio_path = download_audio(receive_postback[1])
+                                upload_audio_filedata(recipient_id, audio_path['output'])
+                                #audio_url = find_audio_url(receive_postback[1])
+                                #attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
+                                #upload_audio_attachements(recipient_id, attachmentID)
                                 send_message(recipient_id, 'Profiter bien')
+
 
                             request_check['previous'] = request_check['recent']
                             request_check['recent'] = ''
@@ -212,7 +208,7 @@ def upload_audio_fb(recipient_id, audio_url):
       "type":"audio", 
         "payload":{
             "url": audio_url,
-            "is_reusable":"True",
+            "is_reusable":"True"
         }
         }
     }}
@@ -221,6 +217,7 @@ def upload_audio_fb(recipient_id, audio_url):
     headers = {"Content-Type": "application/json"},
     json=payload)
     rep = json.loads(reponse.text)
+    print(rep)
     return rep.get('attachment_id')
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
@@ -243,6 +240,37 @@ def upload_audio_attachements(recipient_id, attachment_id):
     headers = {"Content-Type": "application/json"},
     json=payload)
     print(reponse)
+
+def upload_audio_filedata(recipient_id,path):
+    params = {
+        "access_token": ACCESS_TOKEN
+    }
+    print(os.getcwd())
+    data = {
+        # encode nested json to avoid errors during multipart encoding process
+        'recipient': json.dumps({
+            'id': recipient_id
+        }),
+        # encode nested json to avoid errors during multipart encoding process
+        'message': json.dumps({
+            'attachment': {
+                'type': 'audio',
+                'payload': {}
+            }
+        }),
+        'filedata': (os.path.basename(path), open(path, 'rb'), 'audio/mp3')
+    }
+
+    # multipart encode the entire payload
+    multipart_data = MultipartEncoder(data)
+
+    # multipart header from multipart_data
+    multipart_header = {
+        'Content-Type': multipart_data.content_type
+    }
+
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,
+                      data=multipart_data)
 
 def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
@@ -354,5 +382,6 @@ def send_BM(recipient_id, response_sent_text, element):
     return "success"
 
 
+
 if __name__ == "__main__":
-    app.run()
+        app.run(threaded=True)
