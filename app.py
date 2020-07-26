@@ -6,7 +6,8 @@ from scrapping import scrape_google, scrape_youtube
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
-from youtubedl import find_ydl_url, find_audio_url, download_audio
+from youtubedl import find_ydl_url, find_audio_url, download_audio, download_video
+from pdfconverter import convert_url_img, convert_url_pdf
 import threading
 import os
 from requests_toolbelt import MultipartEncoder
@@ -42,7 +43,7 @@ class Messenger(BaseMessenger):
     def message(self, message):
         action = process_message(message)
         res = self.send(action, 'RESPONSE')
-        return "ok", 200
+        return 'success'
 
     def postback(self, message):
         payload = message['postback']['payload'].split()
@@ -57,7 +58,7 @@ class Messenger(BaseMessenger):
             response = Text(text='This is an example text message.')
         action = response.to_dict()
         self.send(action)
-        return "ok", 200
+        return 'success'
 
 
 request_check = {'previous': '', 'recent': ''}
@@ -88,15 +89,15 @@ def receive_message():
                     recipient_id = message['sender']['id']
                     if message['message'].get('text'):
                         receive_message = message['message'].get('text').split()
+                        print(receive_message)
                         if (receive_message[0] == "search_google"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id,
-                                             'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id,
-                                             'ok, research google {} en cours ....'.format(response_query))
+                                send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
+
                         if (receive_message[0] == "search_youtube"):
                             if len(receive_message) < 2:
                                 send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
@@ -108,6 +109,8 @@ def receive_message():
                             response_sent_text = get_message()
                             send_BM(recipient_id, response_sent_text, elements2)
                             send_message(recipient_id, response_sent_text)
+
+
                     if message['message'].get('attachments'):
                         response_sent_nontext = get_message()
                         send_message(recipient_id, response_sent_nontext)
@@ -122,8 +125,44 @@ def receive_message():
                                              'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
+                                request_check['recent'] = response_query
+                                print(
+                                    '======================================request check=====================================')
+                                print(request_check)
+                                print(
+                                    '======================================request check=====================================')
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                    pdf_path = convert_url_pdf(receive_postback[1])
+                                    upload_file_filedata(recipient_id, pdf_path)
+                                    send_message(recipient_id, 'Profiter bien')
+
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
+                                print(request_check)
+                                print('=============================== verify ==============================')
+                        if receive_postback[0] == "IMAGE_view":
+                            if len(receive_postback) < 2:
                                 send_message(recipient_id,
-                                             'ok, transcription to PDF {} en cours ....'.format(response_query))
+                                             'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                request_check['recent'] = response_query
+                                print('======================================request check=====================================')
+                                print(request_check)
+                                print('======================================request check=====================================')
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                    image_path = convert_url_img(receive_postback[1])
+                                    upload_img_filedata(recipient_id, image_path)
+                                    send_message(recipient_id, 'Profiter bien')
+
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
+                                print(request_check)
+                                print('=============================== verify ==============================')
                         if receive_postback[0] == "image":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
@@ -153,7 +192,7 @@ def receive_message():
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             request_check['recent'] = response_query
                             print('======================================request check=====================================')
-                            print (request_check)
+                            print(request_check)
                             print('======================================request check=====================================')
                             if (request_check['previous'] != request_check['recent']):
                                 send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
@@ -165,11 +204,63 @@ def receive_message():
                             print('=============================== verify ==============================')
                             print(request_check)
                             print('=============================== verify ==============================')
+                        if receive_postback[0] == "Down_youtube":
+                            if len(receive_postback) < 2:
+                                send_message(recipient_id, 'Erreur veuillez recommencer')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                send_message(recipient_id,'ok, Telechargement {} en cours ....'.format(response_query))
+                                send_generic_template_download_youtube(recipient_id, response_query)
+                        if receive_postback[0] == "audio_download":
+                            if len(receive_postback) < 2:
+                                send_message(recipient_id, 'Erreur veuillez recommencer')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                request_check['recent'] = response_query
+                                print('======================================request check=====================================')
+                                print(request_check)
+                                print('======================================request check=====================================')
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    audio_path = download_audio(receive_postback[1])
+                                    upload_file_filedata(recipient_id, audio_path['output'])
+                                    send_message(recipient_id, 'Profiter bien')
+
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
+                                print(request_check)
+                                print('=============================== verify ==============================')
+
+                        if receive_postback[0] == "video_download":
+                            if len(receive_postback) < 2:
+                                send_message(recipient_id, 'Erreur veuillez recommencer')
+                            else:
+                                response_query = ' '.join(map(str, receive_postback[1:]))
+                                request_check['recent'] = response_query
+                                print('======================================request check=====================================')
+                                print(request_check)
+                                print('======================================request check=====================================')
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    audio_path = download_video(receive_postback[1])
+                                    upload_file_filedata(recipient_id, audio_path)
+                                    send_message(recipient_id, 'Profiter bien')
+
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
+                                print(request_check)
+                                print('=============================== verify ==============================')
+
+
+
+
 
 
     sem.release()
 
-    return "ok", 200
+    return 'success'
 
 
 def interrupt():
@@ -197,6 +288,30 @@ def get_message():
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
     return "success"
+
+
+def upload_video_fb(recipient_id, audio_url):
+    payload ={
+    "recipient":{
+      "id":recipient_id
+    },
+    "message":{
+    "attachment":{
+      "type":"file",
+        "payload":{
+            "url": audio_url,
+            "is_reusable":"True"
+        }
+        }
+    }}
+    reponse = requests.post("https://graph.facebook.com/v7.0/me/messages",
+    params={"access_token": ACCESS_TOKEN},
+    headers = {"Content-Type": "application/json"},
+    json=payload)
+
+    response = json.loads(reponse.text)
+    print(response)
+
 
 def upload_audio_fb(recipient_id, audio_url):
     payload ={ 
@@ -269,6 +384,66 @@ def upload_audio_filedata(recipient_id,path):
         'Content-Type': multipart_data.content_type
     }
 
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,data=multipart_data)
+
+def upload_file_filedata(recipient_id,path):
+    params = {
+        "access_token": ACCESS_TOKEN
+    }
+    print(os.getcwd())
+    data = {
+        # encode nested json to avoid errors during multipart encoding process
+        'recipient': json.dumps({
+            'id': recipient_id
+        }),
+        # encode nested json to avoid errors during multipart encoding process
+        'message': json.dumps({
+            'attachment': {
+                'type': 'file',
+                'payload': {}
+            }
+        }),
+        'filedata': (os.path.basename(path), open(path, 'rb'), 'image/png')
+    }
+
+    # multipart encode the entire payload
+    multipart_data = MultipartEncoder(data)
+
+    # multipart header from multipart_data
+    multipart_header = {
+        'Content-Type': multipart_data.content_type
+    }
+
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,data=multipart_data)
+
+def upload_img_filedata(recipient_id, path):
+    params = {
+        "access_token": ACCESS_TOKEN
+    }
+    print(os.getcwd())
+    data = {
+        # encode nested json to avoid errors during multipart encoding process
+        'recipient': json.dumps({
+            'id': recipient_id
+        }),
+        # encode nested json to avoid errors during multipart encoding process
+        'message': json.dumps({
+            'attachment': {
+                'type': 'image',
+                'payload': {}
+            }
+        }),
+        'filedata': (os.path.basename(path), open(path, 'rb'), 'image/png')
+    }
+
+    # multipart encode the entire payload
+    multipart_data = MultipartEncoder(data)
+
+    # multipart header from multipart_data
+    multipart_header = {
+        'Content-Type': multipart_data.content_type
+    }
+
     r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,
                       data=multipart_data)
 
@@ -296,6 +471,11 @@ def send_generic_template_google(recipient_id, research_query):
                     "type": "postback",
                     "title": "PDF view",
                     "payload": "PDF_view {}".format(result["link"])
+                },
+                {
+                    "type": "postback",
+                    "title": "Image view",
+                    "payload": "IMAGE_view {}".format(result["link"])
                 }
             ]
         })
@@ -316,9 +496,7 @@ def send_generic_template_google(recipient_id, research_query):
         }
     }
     resp = requests.post(url, headers={"Content-Type": "application/json"}, json=data)
-    postback_data = request.get_json()
     return "success"
-
 
 def send_generic_template_youtube(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
@@ -333,14 +511,14 @@ def send_generic_template_youtube(recipient_id, research_query):
                                                                          result["channel"]),
             "default_action": {
                 "type": "web_url",
-                "url": "https://google.com",
+                "url": result["link"],
                 "webview_height_ratio": "tall",
             },
             "buttons": [
                 {
-                    "type": "web_url",
-                    "url": result["link"],
-                    "title": "View In Youtube"
+                    "type": "postback",
+                    "title": "Download",
+                    "payload": "Down_youtube {}".format(result["link"])
                 },
                 {
                     "type": "postback",
@@ -375,7 +553,45 @@ def send_generic_template_youtube(recipient_id, research_query):
     resp = requests.post(url, headers={"Content-Type": "application/json"}, json=data)
     postback_data = request.get_json()
     return "success"
+def send_generic_template_download_youtube(recipient_id, link):
+    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
+    payload = []
+    payload.append({
+        "title": "TELECHARGEMENT",
+        "image_url": "https://www.prodrivers.ie/wp-content/uploads/dowload.gif",
+        "subtitle": "Veuillez choisir une option Video | Audio",
+        "buttons": [
+            {
+                "type": "postback",
+                "title": "Video",
+                "payload": "video_download {}".format(link)
+            },
+            {
+                "type": "postback",
+                "title": "Audio",
+                "payload": "audio_download {}".format(link)
+            }
+        ]
+    })
+    extra_data = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": payload
+            }
+        }
+    }
 
+    data = {
+        'recipient': {'id': recipient_id},
+        'message': {
+            "attachment": extra_data["attachment"]
+        }
+    }
+    resp = requests.post(url, headers={"Content-Type": "application/json"}, json=data)
+    postback_data = request.get_json()
+    return "success"
 
 def send_BM(recipient_id, response_sent_text, element):
     bot.send_button_message(recipient_id, response_sent_text, element)

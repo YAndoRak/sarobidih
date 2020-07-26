@@ -55,9 +55,14 @@ def find_audio_url(url_audio):
 def download_video(url):
     ydl_opts = {
         'outtmpl': './tmp/video/%(title)s.%(ext)s',
+        'format': '18/best',
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
+        info_dict = ydl.extract_info(url, download=False)
+        input = ydl.prepare_filename(info_dict)
+
+    return input
 
 def download_audio(url):
     ydl_opts = {
@@ -82,6 +87,6 @@ def download_audio(url):
 
 if __name__ == "__main__":
 
-    output = download_audio('https://www.youtube.com/watch?v=M4EZ8kpX3Os')
+    output = download_video('https://www.youtube.com/watch?v=aarAVxPB32Q')
     print(output)
 
