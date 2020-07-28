@@ -7,7 +7,7 @@ from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
 from youtubedl import find_ydl_url, find_audio_url, download_audio, download_video
-#from pdfconverter import convert_url_img, convert_url_pdf
+from pdfconverter import convert_url_img, convert_url_pdf
 import threading
 import os
 from requests_toolbelt import MultipartEncoder
