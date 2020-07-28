@@ -327,7 +327,7 @@ def upload_audio_fb(recipient_id, audio_url):
     "attachment":{
       "type":"audio", 
         "payload":{
-            "url": audio_url
+            "url": ,
             "is_reusable":"True"
         }
         }
