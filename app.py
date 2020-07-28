@@ -332,11 +332,10 @@ def upload_audio_fb(recipient_id, audio_url):
         }
         }
     }}
-    multipart_data = MultipartEncoder(payload)
     reponse = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
     params={"access_token": ACCESS_TOKEN},
-    headers = {"Content-Type": multipart_data.content_type},
-    data=payload)
+    headers = {"Content-Type": "application/json"},
+    json=payload)
     rep = json.loads(reponse.text)
     #upload_audio_attachements(recipient_id, rep.get('attachment_id'))
     return 'ok', 200#rep.get('attachment_id')

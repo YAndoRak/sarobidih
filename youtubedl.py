@@ -29,16 +29,9 @@ def find_ydl_url(url):
             print('Filesize : {}'.format(video_url['filesize']))
             print('=================================== 360 P ====================================')
             return video_url
+ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 def find_audio_url(url_audio):
-    ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-    }
-    with youtube_dl.YoutubeDL(ydl_opts) as ydlaud:
+    with ydlaud:
         resultat = ydlaud.extract_info(
             url_audio,
             download=False # We just want to extract the info
