@@ -30,7 +30,15 @@ def find_ydl_url(url):
             print('=================================== 360 P ====================================')
             return video_url
 def find_audio_url(url_audio):
-    with ydlaud:
+    ydl_opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+    }
+    with youtube_dl.YoutubeDL(ydl_opts) as ydlaud:
         resultat = ydlaud.extract_info(
             url_audio,
             download=False # We just want to extract the info
