@@ -328,7 +328,7 @@ def upload_audio_fb(recipient_id, audio_url):
       "type":"audio", 
         "payload":{
             "url": audio_url
-            #"is_reusable":"True"
+            "is_reusable":"True"
         }
         }
     }}
@@ -337,7 +337,7 @@ def upload_audio_fb(recipient_id, audio_url):
     headers = {"Content-Type": "application/json"},
     json=payload)
     rep = json.loads(reponse.text)
-    #upload_audio_attachements(recipient_id, rep.get('attachment_id'))
+    upload_audio_attachements(recipient_id, rep.get('attachment_id'))
     return 'ok', 200#rep.get('attachment_id')
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
