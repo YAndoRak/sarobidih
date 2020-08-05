@@ -13,14 +13,10 @@ import os
 from requests_toolbelt import MultipartEncoder
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAI1QygXjocBAJOvCJn02tQpx115pFF1GQvVjzZCQ01NSRuviVytF1t6ZAF8WTZAZAR7sXDfFQzHdDuqlQv4E7DKgul0bObLDz0z8iQngdUTubMZAZCrhPY3oiGnwP8YcnSvTs8aPZCpViTUu5jxJjgdEY3mVJakLSUH2OatZBbIhrH55p833FMt'
+ACCESS_TOKEN = 'EAAI1QygXjocBAPwSBTjC73rRdoztUGatIOQrQRwLJIXMowGoC9159n7njzJjdv4V6ZBIUyAIj39CqOaDvVWhACh7oHI5wWEBHsoDnTTIZBWatZCkaWg3ohbsKNVUsFxTrDDMp20LVCOpmkPZAp5SlpvnX0uZBGGLaopFOtI2l7vDhqH1XZBdCs'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
-# elements =[{
-#             "type":"web_url",
-#             "url":"https://www.messenger.com",
-#             "title":"Visit Messenger"
-#           }]
+
 elements2 = [{
     "type": "phone_number",
     "title": "Jao's phone",
