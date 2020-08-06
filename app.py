@@ -241,7 +241,7 @@ def receive_message():
                                 print(request_check)
                                 print('=============================== verify ==============================')
     return 'success'
-
+q
 
 
 
@@ -576,4 +576,4 @@ def send_BM(recipient_id, response_sent_text, element):
 
 
 if __name__ == "__main__":
-        app.run(threaded=True)
+        app.run()
