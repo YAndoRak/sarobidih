@@ -8,7 +8,6 @@ from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
 from youtubedl import find_ydl_url, find_audio_url, download_audio, download_video
 from pdfconverter import convert_url_img, convert_url_pdf
-import threading
 import os
 from requests_toolbelt import MultipartEncoder
 
@@ -65,12 +64,6 @@ request_check = {'previous': '', 'recent': ''}
 
 messenger = Messenger(ACCESS_TOKEN)
 
-POOL_TIME = 300  # Seconds
-dataLock = threading.Lock()
-sem = threading. Semaphore()
-# thread handler
-yourThread = threading.Thread()
-
 
 # We will receive messages that Facebook sends our bot at this endpoint
 @app.route("/", methods=['GET', 'POST'])
@@ -79,7 +72,6 @@ def receive_message():
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
     else:
-        sem.acquire()
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
@@ -252,20 +244,8 @@ def receive_message():
                                 print('=============================== verify ==============================')
                                 print(request_check)
                                 print('=============================== verify ==============================')
-
-
-
-
-
-
-    sem.release()
-
     return 'success'
 
-
-def interrupt():
-    global yourThread
-    yourThread.cancel()
 
 
 
