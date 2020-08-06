@@ -123,18 +123,22 @@ def receive_message():
                                              'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
+                                type_query = 'pdf'
+                                request_check['recent'] = response_query + type_query
                                 request_check['recent'] = response_query
-                                print(
-                                    '======================================request check=====================================')
-                                print(request_check)
-                                print(
-                                    '======================================request check=====================================')
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
-                                    pdf_path = convert_url_pdf(receive_postback[1])
-                                    upload_file_filedata(recipient_id, pdf_path)
-                                    send_message(recipient_id, 'Profiter bien')
-
+                                with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                        pdf_path = convert_url_pdf(receive_postback[1])
+                                        upload_file_filedata(recipient_id, pdf_path)
+                                        send_message(recipient_id, 'Profiter bien')
+                                atexit.register(interrupt)
+                                atexit.unregister
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
                                 request_check['previous'] = request_check['recent']
                                 request_check['recent'] = ''
                                 print('=============================== verify ==============================')
@@ -146,16 +150,22 @@ def receive_message():
                                              'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
+                                type_query = 'image'
+                                request_check['recent'] = response_query + type_query
                                 request_check['recent'] = response_query
-                                print('======================================request check=====================================')
-                                print(request_check)
-                                print('======================================request check=====================================')
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
-                                    image_path = convert_url_img(receive_postback[1])
-                                    upload_img_filedata(recipient_id, image_path)
-                                    send_message(recipient_id, 'Profiter bien')
-
+                                with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                        image_path = convert_url_img(receive_postback[1])
+                                        upload_img_filedata(recipient_id, image_path)
+                                        send_message(recipient_id, 'Profiter bien')
+                                atexit.register(interrupt)
+                                atexit.unregister
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
                                 request_check['previous'] = request_check['recent']
                                 request_check['recent'] = ''
                                 print('=============================== verify ==============================')
@@ -167,28 +177,35 @@ def receive_message():
                             messenger.handle(request.get_json(force=True))
                         if receive_postback[0] == "viewaudio":
                             response_query = ' '.join(map(str, receive_postback[1:]))
+                            type_query = 'audio'
+                            request_check['recent'] = response_query + type_query
                             request_check['recent'] = response_query
                             print( '======================================request check=====================================')
                             print(request_check)
                             print( '======================================request check=====================================')
-                            if (request_check['previous'] != request_check['recent']):
-                                send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                audio_path = download_audio(receive_postback[1])
-                                upload_audio_filedata(recipient_id, audio_path['output'])
-                                #audio_url = find_audio_url(receive_postback[1])
-                                #attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
-                                #upload_audio_attachements(recipient_id, attachmentID)
-                                send_message(recipient_id, 'Profiter bien')
-
-
+                            with dataLock:
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    audio_path = download_audio(receive_postback[1])
+                                    upload_audio_filedata(recipient_id, audio_path['output'])
+                                    #audio_url = find_audio_url(receive_postback[1])
+                                    #attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
+                                    #upload_audio_attachements(recipient_id, attachmentID)
+                                    send_message(recipient_id, 'Profiter bien')
+                            atexit.register(interrupt)
+                            atexit.unregister
+                            yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                            yourThread.start()
                             request_check['previous'] = request_check['recent']
                             request_check['recent'] = ''
                             print('=============================== verify ==============================')
                             print(request_check)
                             print('=============================== verify ==============================')
+                            return 'start'
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
-                            request_check['recent'] = response_query
+                            type_query = 'video'
+                            request_check['recent'] = response_query + type_query
                             with dataLock:
                                 print('======================================request check=====================================')
                                 print(request_check)
@@ -201,13 +218,12 @@ def receive_message():
                             atexit.unregister
                             yourThread = threading.Timer(POOL_TIME, timeout(), ())
                             yourThread.start()
-                            return 'start'
-
                             request_check['previous'] = request_check['recent']
                             request_check['recent'] = ''
                             print('=============================== verify ==============================')
                             print(request_check)
                             print('=============================== verify ==============================')
+                            return 'start'
                         if receive_postback[0] == "Down_youtube":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
@@ -220,16 +236,21 @@ def receive_message():
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                request_check['recent'] = response_query
-                                print('======================================request check=====================================')
-                                print(request_check)
-                                print('======================================request check=====================================')
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                    audio_path = download_audio(receive_postback[1])
-                                    upload_file_filedata(recipient_id, audio_path['output'])
-                                    send_message(recipient_id, 'Profiter bien')
-
+                                type_query = 'down_audio'
+                                request_check['recent'] = response_query + type_query
+                                with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        audio_path = download_audio(receive_postback[1])
+                                        upload_file_filedata(recipient_id, audio_path['output'])
+                                        send_message(recipient_id, 'Profiter bien')
+                                atexit.register(interrupt)
+                                atexit.unregister
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
                                 request_check['previous'] = request_check['recent']
                                 request_check['recent'] = ''
                                 print('=============================== verify ==============================')
@@ -241,16 +262,22 @@ def receive_message():
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                request_check['recent'] = response_query
-                                print('======================================request check=====================================')
-                                print(request_check)
-                                print('======================================request check=====================================')
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                    audio_path = download_video(receive_postback[1])
-                                    upload_file_filedata(recipient_id, audio_path)
-                                    send_message(recipient_id, 'Profiter bien')
+                                type_query = 'down_video'
+                                request_check['recent'] = response_query + type_query
+                                with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        audio_path = download_video(receive_postback[1])
+                                        upload_file_filedata(recipient_id, audio_path)
+                                        send_message(recipient_id, 'Profiter bien')
 
+                                atexit.register(interrupt)
+                                atexit.unregister
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
                                 request_check['previous'] = request_check['recent']
                                 request_check['recent'] = ''
                                 print('=============================== verify ==============================')
@@ -263,7 +290,6 @@ def receive_message():
 def interrupt():
     global yourThread
     yourThread.cancel()
-    print('all done')
 
 
 def timeout():
