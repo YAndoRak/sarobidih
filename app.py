@@ -75,7 +75,6 @@ def receive_message():
         token_sent = request.args.get("hub.verify_token")
         return verify_fb_token(token_sent)
     else:
-        sem.acquire()
         output = request.get_json()
         for event in output['entry']:
             messaging = event['messaging']
@@ -248,14 +247,6 @@ def receive_message():
                                 print('=============================== verify ==============================')
                                 print(request_check)
                                 print('=============================== verify ==============================')
-
-
-
-
-
-
-    sem.release()
-
     return 'success'
 
 
