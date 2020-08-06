@@ -65,9 +65,8 @@ request_check = {'previous': '', 'recent': ''}
 
 messenger = Messenger(ACCESS_TOKEN)
 
-POOL_TIME = 300 #Seconds
+POOL_TIME = 1000 #Seconds
 dataLock = threading.Lock()
-# thread handler
 yourThread = threading.Thread()
 
 
