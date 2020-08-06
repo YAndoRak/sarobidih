@@ -20,4 +20,3 @@ youtube-dl
 moviepy
 pdfcrowd
 threaded
-fcntl
