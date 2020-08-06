@@ -8,7 +8,6 @@ from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
 from youtubedl import find_ydl_url, find_audio_url, download_audio, download_video
 from pdfconverter import convert_url_img, convert_url_pdf
-import threading
 import os
 from requests_toolbelt import MultipartEncoder
 
@@ -25,7 +24,7 @@ elements2 = [{
 
 
 ################ fb messenger #################"""
-#
+#test
 def process_message(message):
     response = Video(url='https://brash-lime-enigmosaurus.glitch.me/myvideo.webm')
     return response.to_dict()
@@ -60,12 +59,6 @@ class Messenger(BaseMessenger):
 request_check = {'previous': '', 'recent': ''}
 
 messenger = Messenger(ACCESS_TOKEN)
-
-POOL_TIME = 300  # Seconds
-dataLock = threading.Lock()
-sem = threading. Semaphore()
-# thread handler
-yourThread = threading.Thread()
 
 
 # We will receive messages that Facebook sends our bot at this endpoint
@@ -249,10 +242,6 @@ def receive_message():
                                 print('=============================== verify ==============================')
     return 'success'
 
-
-def interrupt():
-    global yourThread
-    yourThread.cancel()
 
 
 
