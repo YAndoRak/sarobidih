@@ -10,6 +10,9 @@ from youtubedl import find_ydl_url, find_audio_url, download_audio, download_vid
 from pdfconverter import convert_url_img, convert_url_pdf
 import os
 from requests_toolbelt import MultipartEncoder
+import threading
+import atexit
+
 
 app = Flask(__name__)
 
@@ -61,6 +64,11 @@ class Messenger(BaseMessenger):
 request_check = {'previous': '', 'recent': ''}
 
 messenger = Messenger(ACCESS_TOKEN)
+
+POOL_TIME = 300 #Seconds
+dataLock = threading.Lock()
+# thread handler
+yourThread = threading.Thread()
 
 
 # We will receive messages that Facebook sends our bot at this endpoint
@@ -181,13 +189,19 @@ def receive_message():
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             request_check['recent'] = response_query
-                            print('======================================request check=====================================')
-                            print(request_check)
-                            print('======================================request check=====================================')
-                            if (request_check['previous'] != request_check['recent']):
-                                send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
-                                messenger.handle(request.get_json(force=True))
-                                send_message(recipient_id, 'Profiter bien')
+                            with dataLock:
+                                print('======================================request check=====================================')
+                                print(request_check)
+                                print('======================================request check=====================================')
+                                if (request_check['previous'] != request_check['recent']):
+                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    messenger.handle(request.get_json(force=True))
+                                    send_message(recipient_id, 'Profiter bien')
+                            atexit.register(interrupt)
+                            atexit.unregister
+                            yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                            yourThread.start()
+                            return 'start'
 
                             request_check['previous'] = request_check['recent']
                             request_check['recent'] = ''
@@ -245,6 +259,11 @@ def receive_message():
     return 'success'
 
 
+
+def interrupt():
+    global yourThread
+    yourThread.cancel()
+    print('all done')
 
 
 def timeout():
