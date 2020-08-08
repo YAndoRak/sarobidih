@@ -40,7 +40,7 @@ def parse_results(html, keyword):
             title = title.get_text()
             if description:
                 description = description.get_text()
-            if link != '#':
+            if link != '#' and title != 'Images':
                 found_results.append({'keyword': keyword, 'rank': rank, 'title': title, 'description': description, 'link' : link})
                 rank += 1
     return found_results
@@ -65,16 +65,9 @@ if __name__ == '__main__':
     youtube_data = []
 
     try:
+        google = scrape_google('kolibaly',10, "en")
+        print(google)
         results = scrape_youtube('mitonia')
-        print(results)
-        for result in results['search_result']:
-            print('titre = {}'.format(result['title']))
-            print('nombre de vue = {}'.format(result['views']))
-            print('durée = {}'.format(result['duration']))
-            print('chaine = {}'.format(result['channel']))
-            print('link = {}'.format(result['link']))
-            print('thumbnails = {}'.format(result['thumbnails'][3]))
-
 
     except Exception as e:
         print(e)
