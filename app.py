@@ -96,25 +96,20 @@ def receive_message():
                                 send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
 
-                        if (receive_message[0] == "search_youtube"):
+                        if (receive_message[0] == "ytb"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être ytb + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id,'ok, research youtube {} en cours ....'.format(response_query))
+                                send_message(recipient_id,'Ok, recherche youtube 🔑{}🔑 en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
 
                         if (receive_message[0].upper() == "HELP"):
                             response_sent_text = help()
                             send_message(recipient_id, response_sent_text)
                         else:
-                            response_sent_text = get_message()
+                            response_sent_text = other()
                             send_message(recipient_id, response_sent_text)
-
-
-                    if message['message'].get('attachments'):
-                        response_sent_nontext = get_message()
-                        send_message(recipient_id, response_sent_nontext)
 
                 if message.get('postback'):
                     recipient_id = message['sender']['id']
@@ -188,7 +183,7 @@ def receive_message():
                             print( '======================================request check=====================================')
                             with dataLock:
                                 if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\n envoye de votre en cours📫')
                                     audio_path = download_audio(receive_postback[1])
                                     upload_audio_filedata(recipient_id, audio_path['output'])
                                     #audio_url = find_audio_url(receive_postback[1])
@@ -214,7 +209,7 @@ def receive_message():
                                 print(request_check)
                                 print('======================================request check=====================================')
                                 if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\n envoye en cours📫')
                                     messenger.handle(request.get_json(force=True))
                                     send_message(recipient_id, 'Profiter bien')
                             atexit.register(interrupt)
@@ -232,7 +227,7 @@ def receive_message():
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                send_message(recipient_id,'ok, Telechargement {} en cours ....'.format(response_query))
+                                send_message(recipient_id,'Please, veuillez patientez🙏🙏\n\n téléchargement en cours📫')
                                 send_generic_template_download_youtube(recipient_id, response_query)
                         if receive_postback[0] == "audio_download":
                             if len(receive_postback) < 2:
@@ -246,7 +241,7 @@ def receive_message():
                                     print(request_check)
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\n téléchargement en cours📫')
                                         audio_path = download_audio(receive_postback[1])
                                         upload_file_filedata(recipient_id, audio_path['output'])
                                         send_message(recipient_id, 'Profiter bien')
@@ -272,7 +267,7 @@ def receive_message():
                                     print(request_check)
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\n téléchargement en cours📫')
                                         audio_path = download_video(receive_postback[1])
                                         upload_file_filedata(recipient_id, audio_path)
                                         send_message(recipient_id, 'Profiter bien')
