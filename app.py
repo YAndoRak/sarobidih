@@ -96,7 +96,7 @@ def receive_message():
                                 send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
 
-                        elif (receive_message[0] == "search_youtube"):
+                        elif (receive_message[0].upper == "YTB"):
                             if len(receive_message) < 2:
                                 send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
                             else:
