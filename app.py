@@ -476,37 +476,34 @@ def send_generic_template_google(recipient_id, research_query):
     url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
     payload = []
-    i = 0
     for result in results:
-        while i < len(results):
-            payload.append({
-                "title": result[i]["title"],
-                "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
-                "subtitle": result[i]["description"],
-                "default_action": {
+        payload.append({
+            "title": result["title"],
+            "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
+            "subtitle": result["description"],
+            "default_action": {
+                "type": "web_url",
+                "url": result["link"],
+                "webview_height_ratio": "tall",
+            },
+            "buttons": [
+                {
                     "type": "web_url",
-                    "url": result[i]["link"],
-                    "webview_height_ratio": "tall",
+                    "url": result["link"],
+                    "title": "View In Google"
                 },
-                "buttons": [
-                    {
-                        "type": "web_url",
-                        "url": result[i]["link"],
-                        "title": "View In Google"
-                    },
-                    {
-                        "type": "postback",
-                        "title": "PDF view",
-                        "payload": "PDF_view {}".format(result[i]["link"])
-                    },
-                    {
-                        "type": "postback",
-                        "title": "Image view",
-                        "payload": "IMAGE_view {}".format(result[i]["link"])
-                    }
-                ]
-            })
-            i += 1
+                {
+                    "type": "postback",
+                    "title": "PDF view",
+                    "payload": "PDF_view {}".format(result["link"])
+                },
+                {
+                    "type": "postback",
+                    "title": "Image view",
+                    "payload": "IMAGE_view {}".format(result["link"])
+                }
+            ]
+        })
     extra_data = {
         "attachment": {
             "type": "template",
