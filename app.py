@@ -95,7 +95,6 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_message[1:]))
                                 send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
-                                break
 
                         if (receive_message[0] == "ytb"):
                             if len(receive_message) < 2:
@@ -104,15 +103,18 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_message[1:]))
                                 send_message(recipient_id,'Ok, recherche youtube 🔑{}🔑 en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
-                                break
 
                         if (receive_message[0].upper() == "HELP"):
                             response_sent_text = help()
                             send_message(recipient_id, response_sent_text)
                         else:
-                            response_sent_text = other()
+                            response_sent_text = get_message()
                             send_message(recipient_id, response_sent_text)
-                            break
+
+
+                    if message['message'].get('attachments'):
+                        response_sent_nontext = get_message()
+                        send_message(recipient_id, response_sent_nontext)
 
                 if message.get('postback'):
                     recipient_id = message['sender']['id']
