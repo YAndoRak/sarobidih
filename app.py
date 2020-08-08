@@ -3,6 +3,7 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import requests
 from scrapping import scrape_google, scrape_youtube
+from response import help, other
 from fbmessenger import BaseMessenger
 from fbmessenger.elements import Text
 from fbmessenger.attachments import Image, Video
@@ -102,9 +103,12 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_message[1:]))
                                 send_message(recipient_id,'ok, research youtube {} en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
+
+                        if (receive_message[0].upper() == "HELP"):
+                            response_sent_text = help()
+                            send_message(recipient_id, response_sent_text)
                         else:
                             response_sent_text = get_message()
-                            send_BM(recipient_id, response_sent_text, elements2)
                             send_message(recipient_id, response_sent_text)
 
 
@@ -622,4 +626,4 @@ def send_BM(recipient_id, response_sent_text, element):
 
 
 if __name__ == "__main__":
-        app.run()
+    app.run()
