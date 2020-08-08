@@ -188,7 +188,7 @@ def receive_message():
                             print( '======================================request check=====================================')
                             with dataLock:
                                 if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
                                     audio_path = download_audio(receive_postback[1])
                                     upload_audio_filedata(recipient_id, audio_path['output'])
                                     #audio_url = find_audio_url(receive_postback[1])
@@ -214,7 +214,7 @@ def receive_message():
                                 print(request_check)
                                 print('======================================request check=====================================')
                                 if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
                                     messenger.handle(request.get_json(force=True))
                                     send_message(recipient_id, 'Profiter bien')
                             atexit.register(interrupt)
@@ -232,7 +232,7 @@ def receive_message():
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                send_message(recipient_id,'ok, Telechargement {} en cours ....'.format(response_query))
+                                send_message(recipient_id,'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
                                 send_generic_template_download_youtube(recipient_id, response_query)
                         if receive_postback[0] == "audio_download":
                             if len(receive_postback) < 2:
@@ -246,7 +246,7 @@ def receive_message():
                                     print(request_check)
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
                                         audio_path = download_audio(receive_postback[1])
                                         upload_file_filedata(recipient_id, audio_path['output'])
                                         send_message(recipient_id, 'Profiter bien')
@@ -272,7 +272,7 @@ def receive_message():
                                     print(request_check)
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, envoye {} en cours ....'.format(response_query))
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
                                         audio_path = download_video(receive_postback[1])
                                         upload_file_filedata(recipient_id, audio_path)
                                         send_message(recipient_id, 'Profiter bien')
