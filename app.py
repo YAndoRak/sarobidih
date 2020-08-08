@@ -478,7 +478,7 @@ def send_generic_template_google(recipient_id, research_query):
     payload = []
     i = 0
     for result in results:
-        while i < len(google):
+        while i < len(results):
             payload.append({
                 "title": result[i]["title"],
                 "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
