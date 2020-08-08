@@ -85,29 +85,34 @@ def receive_message():
                 print(message)
                 if message.get('message'):
                     recipient_id = message['sender']['id']
-                    print(receive_message)
-                    if (receive_message[0] == "search_google"):
-                        if len(receive_message) < 2:
-                            send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_message[1:]))
-                            send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
-                            send_generic_template_google(recipient_id, response_query)
+                    if message['message'].get('text'):
+                        receive_message = message['message'].get('text').split()
+                        print(receive_message)
+                        if (receive_message[0] == "search_google"):
+                            if len(receive_message) < 2:
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_message[1:]))
+                                send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
+                                send_generic_template_google(recipient_id, response_query)
+                                break
 
-                    if (receive_message[0].upper() == "YTB"):
-                        if len(receive_message) < 2:
-                            send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être ytb + mot_recherché')
-                        else:
-                            response_query = ' '.join(map(str, receive_message[1:]))
-                            send_message(recipient_id,'Ok, recherche youtube 🔑{}🔑 en cours ....'.format(response_query))
-                            send_generic_template_youtube(recipient_id, response_query)
+                        if (receive_message[0] == "ytb"):
+                            if len(receive_message) < 2:
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être ytb + mot_recherché')
+                            else:
+                                response_query = ' '.join(map(str, receive_message[1:]))
+                                send_message(recipient_id,'Ok, recherche youtube 🔑{}🔑 en cours ....'.format(response_query))
+                                send_generic_template_youtube(recipient_id, response_query)
+                                break
 
-                    if (receive_message[0].upper() == "HELP"):
-                        response_sent_text = help()
-                        send_message(recipient_id, response_sent_text)
-                    else:
-                        response_sent_text = other()
-                        send_message(recipient_id, response_sent_text)
+                        if (receive_message[0].upper() == "HELP"):
+                            response_sent_text = help()
+                            send_message(recipient_id, response_sent_text)
+                        else:
+                            response_sent_text = other()
+                            send_message(recipient_id, response_sent_text)
+                            break
 
                 if message.get('postback'):
                     recipient_id = message['sender']['id']
