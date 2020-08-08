@@ -108,7 +108,7 @@ def receive_message():
                             response_sent_text = help()
                             send_message(recipient_id, response_sent_text)
                         else:
-                            response_sent_text = get_message()
+                            response_sent_text = other()
                             send_message(recipient_id, response_sent_text)
 
 
