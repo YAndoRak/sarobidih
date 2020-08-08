@@ -96,12 +96,12 @@ def receive_message():
                                 send_message(recipient_id,'ok, research google {} en cours ....'.format(response_query))
                                 send_generic_template_google(recipient_id, response_query)
 
-                        if (receive_message[0] == "ytb"):
+                        if (receive_message[0] == "search_youtube"):
                             if len(receive_message) < 2:
-                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être ytb + mot_recherché')
+                                send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_youtube + mot_recherché')
                             else:
                                 response_query = ' '.join(map(str, receive_message[1:]))
-                                send_message(recipient_id,'Ok, recherche youtube 🔑{}🔑 en cours ....'.format(response_query))
+                                send_message(recipient_id,'ok, research youtube {} en cours ....'.format(response_query))
                                 send_generic_template_youtube(recipient_id, response_query)
 
                         if (receive_message[0].upper() == "HELP"):
