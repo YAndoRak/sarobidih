@@ -5,7 +5,7 @@ from datetime import datetime
 
 def convert_url_img(url):
     filename1 = datetime.now().strftime("%Y%m%d-%H%M%S")
-    path = './tmp/img/{}.png'.format(filename1)
+    path = 'tmp\img\{}.png'.format(filename1)
     try:
         client = pdfcrowd.HtmlToImageClient('sarobidih', 'babe7d12fc919f55df5f43f259b914e0')
         client.setOutputFormat('png')
@@ -17,7 +17,7 @@ def convert_url_img(url):
 
 def convert_url_pdf(url):
     filename1 = datetime.now().strftime("%Y%m%d-%H%M%S")
-    path = './tmp/pdf/{}.pdf'.format(filename1)
+    path = "tmp\pdf\{}.pdf".format(filename1)
     try:
         # create the API client instance
         client = pdfcrowd.HtmlToPdfClient('sarobidih', 'babe7d12fc919f55df5f43f259b914e0')
@@ -34,5 +34,5 @@ def convert_url_pdf(url):
 
 if __name__ == "__main__":
     filename1 = datetime.now().strftime("%Y%m%d-%H%M%S")
-    test = convert_url_pdf('https://www.youtube.com/watch?v=73_DOquGBD4&list=RDDKbfBSrjVHA&index=9')
-    print (test)
+    test = convert_url_img('https://www.youtube.com/watch?v=73_DOquGBD4&list=RDDKbfBSrjVHA&index=9')
+    print(test)
