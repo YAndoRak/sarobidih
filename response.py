@@ -1,9 +1,7 @@
 def help():
-    help = ('Hello 🤩👋\n'
-          '🔑 Recherche par youtube ==> ytb <video rechercher> (exemple: ytb zezika) \n'
-          "Si malgrès tous cela ne marche pas 😧 , je vous invite à envoyer un message aux responsables directement par MP \n"
-          "J'espère vous être utile. 👨‍🔧\n"
-          "Profiter au maximum 💯")
+    help = ('Hello 🤩👋\n\n'
+          '🔑 Recherche par youtube ==> ytb <video rechercher> (exemple: ytb zezika) \n\n'
+          "J'espère vous être utile. 👨‍🔧")
     return help
 
 def other():
