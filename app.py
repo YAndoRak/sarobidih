@@ -232,7 +232,6 @@ def receive_message():
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
-                                send_message(recipient_id,'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
                                 send_generic_template_download_youtube(recipient_id, response_query)
                         if receive_postback[0] == "audio_download":
                             if len(receive_postback) < 2:
