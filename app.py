@@ -486,7 +486,7 @@ def send_generic_template_google(recipient_id, research_query):
             "subtitle": desc.decode(),
             "default_action": {
                 "type": "web_url",
-                "url": "https://naruto.fandom.com/wiki/Narutopedia",
+                "url": link.decode(),
                 "webview_height_ratio": "tall",
             },
             "buttons": [
