@@ -493,12 +493,12 @@ def send_generic_template_google(recipient_id, research_query):
                 {
                     "type": "postback",
                     "title": "PDF view",
-                    "payload": "PDF_view {}".format("https://naruto.fandom.com/wiki/Narutopedia")
+                    "payload": "PDF_view {}".format(link.decode())
                 },
                 {
                     "type": "postback",
                     "title": "Image view",
-                    "payload": "IMAGE_view {}".format("https://naruto.fandom.com/wiki/Narutopedia")
+                    "payload": "IMAGE_view {}".format(link.decode())
                 }
             ]
         })
