@@ -395,10 +395,10 @@ def upload_audio_filedata(recipient_id,path):
         'message': json.dumps({
             'attachment': {
                 'type': 'audio',
-                'payload': {'is_reusable':'true'}
+                'payload': {}
             }
         }),
-        'filedata': (os.path.basename(path), open(path, 'rb'), 'file')
+        'filedata': (os.path.basename(path), open(path, 'rb'), 'audio/mp3')
     }
 
     # multipart encode the entire payload
