@@ -58,8 +58,9 @@ class Messenger(BaseMessenger):
         if 'viewvideo' in payload1:
             if filesize < 25690112:
                 response = Video(url=payload2)
+                send_message(recipient_id, 'Profiter bien')
             else:
-                response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse")
+                response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
         else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
@@ -221,7 +222,7 @@ def receive_message():
                                 if (request_check['previous'] != request_check['recent']):
                                     send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
                                     messenger.handle(request.get_json(force=True))
-                                    send_message(recipient_id, 'Profiter bien')
+
                             atexit.register(interrupt)
                             atexit.unregister
                             yourThread = threading.Timer(POOL_TIME, timeout(), ())
