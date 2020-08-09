@@ -58,7 +58,6 @@ class Messenger(BaseMessenger):
         if 'viewvideo' in payload1:
             if filesize < 25690112:
                 response = Video(url=payload2)
-                send_message(recipient_id, 'Profiter bien')
             else:
                 response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
         else:
@@ -195,12 +194,15 @@ def receive_message():
                             with dataLock:
                                 if (request_check['previous'] != request_check['recent']):
                                     send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
-                                    audio_path = download_audio(receive_postback[1])
-                                    upload_audio_filedata(recipient_id, audio_path['output'])
-                                    #audio_url = find_audio_url(receive_postback[1])
-                                    #attachmentID = upload_audio_fb(recipient_id, audio_url['url'])
-                                    #upload_audio_attachements(recipient_id, attachmentID)
-                                    send_message(recipient_id, 'Profiter bien')
+                                    check = find_ydl_url(receive_postback[1])
+                                    filesize = check["filesize"]
+                                    if filesize < 25690112:
+                                        audio_path = download_audio(receive_postback[1])
+                                        upload_audio_filedata(recipient_id, audio_path['output'])
+                                        send_message(recipient_id, 'Profiter bien')
+                                    else:
+                                        send_message(recipient_id,
+                                                     "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
                             atexit.register(interrupt)
                             atexit.unregister
                             yourThread = threading.Timer(POOL_TIME, timeout(), ())
@@ -252,9 +254,16 @@ def receive_message():
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
                                         send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
-                                        audio_path = download_audio(receive_postback[1])
-                                        upload_file_filedata(recipient_id, audio_path['output'])
-                                        send_message(recipient_id, 'Profiter bien')
+                                        check = find_ydl_url(receive_postback[1])
+                                        filesize = check["filesize"]
+                                        if filesize < 25690112:
+                                            audio_path = download_audio(receive_postback[1])
+                                            upload_file_filedata(recipient_id, audio_path['output'])
+                                            send_message(recipient_id, 'Profiter bien')
+                                        else:
+                                            send_message(recipient_id,
+                                                         "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+
                                 atexit.register(interrupt)
                                 atexit.unregister
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
@@ -278,9 +287,15 @@ def receive_message():
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
                                         send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
-                                        audio_path = download_video(receive_postback[1])
-                                        upload_file_filedata(recipient_id, audio_path)
-                                        send_message(recipient_id, 'Profiter bien')
+                                        check = find_ydl_url(receive_postback[1])
+                                        filesize = check["filesize"]
+                                        if filesize < 25690112:
+                                            audio_path = download_video(receive_postback[1])
+                                            upload_file_filedata(recipient_id, audio_path)
+                                            send_message(recipient_id, 'Profiter bien')
+                                        else:
+                                            send_message(recipient_id, "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+
 
                                 atexit.register(interrupt)
                                 atexit.unregister
