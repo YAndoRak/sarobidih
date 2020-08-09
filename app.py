@@ -483,7 +483,7 @@ def send_generic_template_google(recipient_id, research_query):
         payload.append({
             "title": title.decode(),
             "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
-            "subtitle": desc.decode(),
+            "subtitle": "mitovy daholo ",
             "default_action": {
                 "type": "web_url",
                 "url": result["link"],
