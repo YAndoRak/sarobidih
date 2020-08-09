@@ -398,7 +398,8 @@ def upload_audio_filedata(recipient_id,path):
                 'payload': {'is_reusable':'true'}
             }
         }),
-c    }
+        'filedata': (os.path.basename(path), open(path, 'rb'), 'file')
+    }
 
     # multipart encode the entire payload
     multipart_data = MultipartEncoder(data)
