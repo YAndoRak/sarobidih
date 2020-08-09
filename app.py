@@ -132,8 +132,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'pdf'
-                                request_check['recent'] = response_query + type_query
-                                request_check['recent'] = response_query
+                                request_check['recent'] = response_query + type_query + recipient_id
                                 with dataLock:
                                     print('======================================request check=====================================')
                                     print(request_check)
@@ -159,8 +158,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'image'
-                                request_check['recent'] = response_query + type_query
-                                request_check['recent'] = response_query
+                                request_check['recent'] = response_query + type_query + recipient_id
                                 with dataLock:
                                     print('======================================request check=====================================')
                                     print(request_check)
@@ -186,8 +184,7 @@ def receive_message():
                         if receive_postback[0] == "viewaudio":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             type_query = 'audio'
-                            request_check['recent'] = response_query + type_query
-                            request_check['recent'] = response_query
+                            request_check['recent'] = response_query + type_query + recipient_id
                             print( '======================================request check=====================================')
                             print(request_check)
                             print( '======================================request check=====================================')
@@ -216,7 +213,7 @@ def receive_message():
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             type_query = 'video'
-                            request_check['recent'] = response_query + type_query
+                            request_check['recent'] = response_query + type_query + recipient_id
                             with dataLock:
                                 print('======================================request check=====================================')
                                 print(request_check)
@@ -247,7 +244,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'down_audio'
-                                request_check['recent'] = response_query + type_query
+                                request_check['recent'] = response_query + type_query + recipient_id
                                 with dataLock:
                                     print('======================================request check=====================================')
                                     print(request_check)
@@ -280,7 +277,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'down_video'
-                                request_check['recent'] = response_query + type_query
+                                request_check['recent'] = response_query + type_query + recipient_id
                                 with dataLock:
                                     print('======================================request check=====================================')
                                     print(request_check)
