@@ -50,12 +50,16 @@ class Messenger(BaseMessenger):
     def postback(self, message):
         payload = message['postback']['payload'].split()
         url_video = find_ydl_url(payload[1])
+        filesize = url_video["filesize"]
         payload2 = url_video['url']
         payload1 = payload[0]
 
 
         if 'viewvideo' in payload1:
-            response = Video(url=payload2)
+            if filesize < 25690112:
+                response = Video(url=payload2)
+            else:
+                response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse")
         else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
