@@ -13,6 +13,7 @@ import os
 from requests_toolbelt import MultipartEncoder
 import threading
 import atexit
+from hurry.filesize import size
 
 
 app = Flask(__name__)
@@ -530,7 +531,7 @@ def send_generic_template_youtube(recipient_id, research_query):
         payload.append({
             "title": result["title"],
             "image_url": result['thumbnails'][2],
-            "subtitle": "Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"],
+            "subtitle": "Taille {} | Nombre de vue {} | Durée {} | Chaine {}".format(size(result['filesize']), result["views"], result["duration"],
                                                                          result["channel"]),
             "default_action": {
                 "type": "web_url",
