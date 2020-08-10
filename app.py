@@ -12,8 +12,8 @@ from pdfconverter import convert_url_img, convert_url_pdf
 import os
 from requests_toolbelt import MultipartEncoder
 import threading
-import atexit
-from hurry.filesize import size
+import youtube_dl
+
 
 
 app = Flask(__name__)
@@ -210,7 +210,7 @@ def receive_message():
                                 print(request_check)
                                 print('=============================== verify ==============================')
                                 return 'start'
-                            except Exception:
+                            except youtube_dl.utils.DownloadError:
                                 send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
 
                         elif receive_postback[0] == "viewvideo":
