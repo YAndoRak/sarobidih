@@ -150,8 +150,8 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
-                        if receive_postback[0] == "IMAGE_view":
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
+                        elif receive_postback[0] == "IMAGE_view":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id,
                                              'Veuillez réessayer la syntaxe exacte doit être PDF_view + lien_recherché')
@@ -178,20 +178,20 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
-                        if receive_postback[0] == "image":
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
+                        elif receive_postback[0] == "image":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
                             messenger.handle(request.get_json(force=True))
-                        if receive_postback[0] == "viewaudio":
+                        elif receive_postback[0] == "viewaudio":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             type_query = 'audio'
                             request_check['recent'] = response_query + type_query + recipient_id
-                            print( '======================================request check=====================================')
-                            print(request_check)
-                            print( '======================================request check=====================================')
                             try:
                                 with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
                                         send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
                                         check = find_ydl_url(receive_postback[1])
@@ -201,8 +201,7 @@ def receive_message():
                                             upload_audio_filedata(recipient_id, audio_path['output'])
                                             send_message(recipient_id, 'Profiter bien')
                                         else:
-                                            send_message(recipient_id,
-                                                         "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+                                            send_message(recipient_id, "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -212,9 +211,9 @@ def receive_message():
                                 print('=============================== verify ==============================')
                                 return 'start'
                             except Exception:
-                                send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
+                                send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
 
-                        if receive_postback[0] == "viewvideo":
+                        elif receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             type_query = 'video'
                             request_check['recent'] = response_query + type_query + recipient_id
@@ -235,14 +234,14 @@ def receive_message():
                                 print('=============================== verify ==============================')
                                 return 'start'
                             except Exception:
-                                send_message(recipient_id,'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
-                        if receive_postback[0] == "Down_youtube":
+                                send_message(recipient_id,'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
+                        elif receive_postback[0] == "Down_youtube":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 send_generic_template_download_youtube(recipient_id, response_query)
-                        if receive_postback[0] == "audio_download":
+                        elif receive_postback[0] == "audio_download":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
@@ -274,9 +273,9 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
 
-                        if receive_postback[0] == "video_download":
+                        elif receive_postback[0] == "video_download":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
                             else:
@@ -307,7 +306,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
     return 'success'
 
 
