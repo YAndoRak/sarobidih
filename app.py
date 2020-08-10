@@ -210,7 +210,7 @@ def receive_message():
                                 print(request_check)
                                 print('=============================== verify ==============================')
                                 return 'start'
-                            except youtube_dl.utils.DownloadError:
+                            except Exception:
                                 send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video')
 
                         elif receive_postback[0] == "viewvideo":

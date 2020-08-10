@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 import youtube_dl
+from moviepy.editor import *
 import os
-#from moviepy.editor import *
+
 
 
 ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
@@ -30,6 +31,50 @@ def find_ydl_url(url):
             print('=================================== 360 P ====================================')
             return video_url
 ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
+
+def find_ydl_url_test(url):
+    with ydl:
+        result = ydl.extract_info(
+            url,
+            download=False # We just want to extract the info
+        )
+
+    if 'entries' in result:
+        video = result['entries'][0]
+    else:
+        video = result
+
+    video_urls = video['formats']
+    for video_url in video_urls:
+        print (video_url)
+ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
+
+def find_ydl_url(url):
+    with ydl:
+        result = ydl.extract_info(
+            url,
+            download=False # We just want to extract the info
+        )
+
+    if 'entries' in result:
+        video = result['entries'][0]
+    else:
+        video = result
+
+    video_urls = video['formats']
+    for video_url in video_urls:
+        if video_url['format_id'] == '18' :
+            print('=================================== 360 P ====================================')
+            print('Extension : {}'.format(video_url['ext']))
+            print('URL : {}'.format(video_url['url']))
+            print('Fomart ID: {}'.format(video_url['format_id']))
+            print('Fomart : {}'.format(video_url['format']))
+            print('Filesize : {}'.format(video_url['filesize']))
+            print('=================================== 360 P ====================================')
+            return video_url
+ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
+
+
 def find_audio_url(url_audio):
     with ydlaud:
         resultat = ydlaud.extract_info(
@@ -53,6 +98,7 @@ def find_audio_url(url_audio):
             print('Filesize : {}'.format(audio_url['filesize']))
             print('=================================== M4a ====================================')
             return audio_url
+
 def download_video(url):
     ydl_opts = {
         'outtmpl': './tmp/video/%(title)s.%(ext)s',
@@ -88,6 +134,6 @@ def download_audio(url):
 
 if __name__ == "__main__":
 
-    output = download_video('https://www.youtube.com/watch?v=aarAVxPB32Q')
+    output = find_ydl_url_test('https://fr.pornhub.com/view_video.php?viewkey=ph5d94bf491e8cd')
     print(output)
 
