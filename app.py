@@ -148,7 +148,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                     print(request_check)
                                     print('=============================== verify ==============================')
-                                except:
+                                except Exception:
                                     send_message(recipient_id,
                                                  'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "IMAGE_view":
@@ -176,7 +176,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                     print(request_check)
                                     print('=============================== verify ==============================')
-                                except:
+                                except Exception:
                                     send_message(recipient_id,
                                                  'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "image":
@@ -211,7 +211,7 @@ def receive_message():
                                 print(request_check)
                                 print('=============================== verify ==============================')
                                 return 'start'
-                            except :
+                            except Exception:
                                 send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
 
                         if receive_postback[0] == "viewvideo":
@@ -234,7 +234,7 @@ def receive_message():
                                 print(request_check)
                                 print('=============================== verify ==============================')
                                 return 'start'
-                            except:
+                            except Exception:
                                 send_message(recipient_id,'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "Down_youtube":
                             if len(receive_postback) < 2:
@@ -272,7 +272,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                     print(request_check)
                                     print('=============================== verify ==============================')
-                                except:
+                                except Exception:
                                     send_message(recipient_id,
                                                  'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
 
@@ -305,7 +305,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                     print(request_check)
                                     print('=============================== verify ==============================')
-                                except:
+                                except Exception:
                                     send_message(recipient_id,
                                                  'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
     return 'success'
