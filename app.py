@@ -547,11 +547,10 @@ def send_generic_template_youtube(recipient_id, research_query):
     payload = []
     for result in results['search_result']:
         ydl = find_ydl_url(result["link"])
-        filesize = '{}o'.format(size(ydl["filesize"]))
         payload.append({
             "title": result["title"],
             "image_url": result['thumbnails'][2],
-            "subtitle": "Taille {} | Nombre de vue {} | Durée {} | Chaine {}".format(filesize, result["views"], result["duration"],
+            "subtitle": " Nombre de vue {} | Durée {} | Chaine {}".format(result["views"], result["duration"],
                                                                          result["channel"]),
             "default_action": {
                 "type": "web_url",
