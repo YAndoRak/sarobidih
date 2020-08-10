@@ -2,12 +2,19 @@ import requests
 from bs4 import BeautifulSoup
 import time
 from youtubesearchpython import SearchVideos
-
+import textwrap
+import pornhub
 
 
 
 USER_AGENT = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+
+def scrape_pornhub(search_term):
+    ph = PornHub()
+    result = ph.search(search_term)
+    return result
+
 
 def scrape_youtube(search_term):
     assert isinstance(search_term, str), 'Search term must be a string'
@@ -63,11 +70,18 @@ def scrape_google(search_term, number_results, language_code):
 if __name__ == '__main__':
     data = []
     youtube_data = []
+    i= 0
 
     try:
-        google = scrape_google('kolibaly',10, "en")
-        print(google)
-        results = scrape_youtube('mitonia')
+        #exemple
+        client = pornhub.PornHub()
+        keywords = ["teen", "milf"]
+        client = pornhub.PornHub(keywords)
+
+        for video in client.getVideos(10, page=2):
+            print(video)
+            print(video["url"])
+
 
     except Exception as e:
         print(e)

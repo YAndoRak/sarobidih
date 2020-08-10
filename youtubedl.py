@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 import youtube_dl
 import os
-from moviepy.editor import *
+#from moviepy.editor import *
 
 
 ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
@@ -29,29 +29,30 @@ def find_ydl_url(url):
             print('Filesize : {}'.format(video_url['filesize']))
             print('=================================== 360 P ====================================')
             return video_url
+ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 def find_audio_url(url_audio):
-    with ydlaudio:
-        resultaudio = ydlaudio.extract_info(
+    with ydlaud:
+        resultat = ydlaud.extract_info(
             url_audio,
             download=False # We just want to extract the info
         )
 
-    if 'entries' in resultaudio:
-        audio = resultaudio['entries'][0]
+    if 'entries' in resultat:
+        audio = resultat['entries'][0]
     else:
-        audio = resultaudio
+        audio = resultat
 
     audio_urls = audio['formats']
-    print(audio_urls)
     for audio_url in audio_urls:
-        print(audio_url)
-        print('=================================== M4a ====================================')
-        print('Extension : {}'.format(audio_url['ext']))
-        print('URL : {}'.format(audio_url['url']))
-        print('Fomart ID: {}'.format(audio_url['format_id']))
-        print('Fomart : {}'.format(audio_url['format']))
-        print('Filesize : {}'.format(audio_url['filesize']))
-        print('=================================== M4a ====================================')
+        if audio_url['ext'] == 'm4a' :
+            print('=================================== M4a ====================================')
+            print('Extension : {}'.format(audio_url['ext']))
+            print('URL : {}'.format(audio_url['url']))
+            print('Fomart ID: {}'.format(audio_url['format_id']))
+            print('Fomart : {}'.format(audio_url['format']))
+            print('Filesize : {}'.format(audio_url['filesize']))
+            print('=================================== M4a ====================================')
+            return audio_url
 def download_video(url):
     ydl_opts = {
         'outtmpl': './tmp/video/%(title)s.%(ext)s',

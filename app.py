@@ -17,9 +17,7 @@ from hurry.filesize import size
 
 
 app = Flask(__name__)
-
 ACCESS_TOKEN = 'EAAI1QygXjocBAJupxEXFiNJAFlIGCA44EjIe1Itui35dZCfTZAZCZAUiZBYCRcbs6X4sDhOq5IKm6OJK16i9hqw7d3podv0717ezpMwiDspFfaYiH1vsyZBDIvgYtLOa6dca2GSPv9RuD2R0Be7CW29jaBrde85y3kX8OSDwzmZBc3ptnKgo20y    '
-
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 
@@ -142,8 +140,6 @@ def receive_message():
                                         pdf_path = convert_url_pdf(receive_postback[1])
                                         upload_file_filedata(recipient_id, pdf_path)
                                         send_message(recipient_id, 'Profiter bien')
-                                atexit.register(interrupt)
-                                atexit.unregister
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -168,8 +164,6 @@ def receive_message():
                                         image_path = convert_url_img(receive_postback[1])
                                         upload_img_filedata(recipient_id, image_path)
                                         send_message(recipient_id, 'Profiter bien')
-                                atexit.register(interrupt)
-                                atexit.unregister
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -200,8 +194,6 @@ def receive_message():
                                     else:
                                         send_message(recipient_id,
                                                      "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-                            atexit.register(interrupt)
-                            atexit.unregister
                             yourThread = threading.Timer(POOL_TIME, timeout(), ())
                             yourThread.start()
                             request_check['previous'] = request_check['recent']
@@ -221,9 +213,6 @@ def receive_message():
                                 if (request_check['previous'] != request_check['recent']):
                                     send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
                                     messenger.handle(request.get_json(force=True))
-
-                            atexit.register(interrupt)
-                            atexit.unregister
                             yourThread = threading.Timer(POOL_TIME, timeout(), ())
                             yourThread.start()
                             request_check['previous'] = request_check['recent']
@@ -260,9 +249,6 @@ def receive_message():
                                         else:
                                             send_message(recipient_id,
                                                          "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-
-                                atexit.register(interrupt)
-                                atexit.unregister
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -292,10 +278,6 @@ def receive_message():
                                             send_message(recipient_id, 'Profiter bien')
                                         else:
                                             send_message(recipient_id, "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-
-
-                                atexit.register(interrupt)
-                                atexit.unregister
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -307,9 +289,8 @@ def receive_message():
 
 
 
-def interrupt():
-    global yourThread
-    yourThread.cancel()
+
+
 
 
 def timeout():
@@ -375,8 +356,8 @@ def upload_audio_fb(recipient_id, audio_url):
     headers = {"Content-Type": "application/json"},
     json=payload)
     rep = json.loads(reponse.text)
-    print(rep)
-    return rep.get('attachment_id')
+    upload_audio_attachements(recipient_id, rep.get('attachment_id'))
+    return 'ok', 200#rep.get('attachment_id')
 
 #    #upload_audio_attachements(recipient_id, videme.Response()['message'].get('attachment_id'))
 # def send_message_video(recipien_id, response):
