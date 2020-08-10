@@ -131,22 +131,26 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'pdf'
                                 request_check['recent'] = response_query + type_query + recipient_id
-                                with dataLock:
-                                    print('======================================request check=====================================')
+                                try:
+                                    with dataLock:
+                                        print('======================================request check=====================================')
+                                        print(request_check)
+                                        print('======================================request check=====================================')
+                                        if (request_check['previous'] != request_check['recent']):
+                                            send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                            pdf_path = convert_url_pdf(receive_postback[1])
+                                            upload_file_filedata(recipient_id, pdf_path)
+                                            send_message(recipient_id, 'Profiter bien')
+                                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                    yourThread.start()
+                                    request_check['previous'] = request_check['recent']
+                                    request_check['recent'] = ''
+                                    print('=============================== verify ==============================')
                                     print(request_check)
-                                    print('======================================request check=====================================')
-                                    if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
-                                        pdf_path = convert_url_pdf(receive_postback[1])
-                                        upload_file_filedata(recipient_id, pdf_path)
-                                        send_message(recipient_id, 'Profiter bien')
-                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                                yourThread.start()
-                                request_check['previous'] = request_check['recent']
-                                request_check['recent'] = ''
-                                print('=============================== verify ==============================')
-                                print(request_check)
-                                print('=============================== verify ==============================')
+                                    print('=============================== verify ==============================')
+                                except:
+                                    send_message(recipient_id,
+                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "IMAGE_view":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id,
@@ -155,22 +159,26 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'image'
                                 request_check['recent'] = response_query + type_query + recipient_id
-                                with dataLock:
-                                    print('======================================request check=====================================')
+                                try:
+                                    with dataLock:
+                                        print('======================================request check=====================================')
+                                        print(request_check)
+                                        print('======================================request check=====================================')
+                                        if (request_check['previous'] != request_check['recent']):
+                                            send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
+                                            image_path = convert_url_img(receive_postback[1])
+                                            upload_img_filedata(recipient_id, image_path)
+                                            send_message(recipient_id, 'Profiter bien')
+                                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                    yourThread.start()
+                                    request_check['previous'] = request_check['recent']
+                                    request_check['recent'] = ''
+                                    print('=============================== verify ==============================')
                                     print(request_check)
-                                    print('======================================request check=====================================')
-                                    if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'ok, Envoye {} en cours ....'.format(response_query))
-                                        image_path = convert_url_img(receive_postback[1])
-                                        upload_img_filedata(recipient_id, image_path)
-                                        send_message(recipient_id, 'Profiter bien')
-                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                                yourThread.start()
-                                request_check['previous'] = request_check['recent']
-                                request_check['recent'] = ''
-                                print('=============================== verify ==============================')
-                                print(request_check)
-                                print('=============================== verify ==============================')
+                                    print('=============================== verify ==============================')
+                                except:
+                                    send_message(recipient_id,
+                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "image":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
@@ -182,45 +190,52 @@ def receive_message():
                             print( '======================================request check=====================================')
                             print(request_check)
                             print( '======================================request check=====================================')
-                            with dataLock:
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
-                                    check = find_ydl_url(receive_postback[1])
-                                    filesize = check["filesize"]
-                                    if filesize < 25690112:
-                                        audio_path = download_audio(receive_postback[1])
-                                        upload_audio_filedata(recipient_id, audio_path['output'])
-                                        send_message(recipient_id, 'Profiter bien')
-                                    else:
-                                        send_message(recipient_id,
-                                                     "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-                            yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                            yourThread.start()
-                            request_check['previous'] = request_check['recent']
-                            request_check['recent'] = ''
-                            print('=============================== verify ==============================')
-                            print(request_check)
-                            print('=============================== verify ==============================')
-                            return 'start'
+                            try:
+                                with dataLock:
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
+                                        check = find_ydl_url(receive_postback[1])
+                                        filesize = check["filesize"]
+                                        if filesize < 25690112:
+                                            audio_path = download_audio(receive_postback[1])
+                                            upload_audio_filedata(recipient_id, audio_path['output'])
+                                            send_message(recipient_id, 'Profiter bien')
+                                        else:
+                                            send_message(recipient_id,
+                                                         "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
+                                print(request_check)
+                                print('=============================== verify ==============================')
+                                return 'start'
+                            except :
+                                send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
+
                         if receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             type_query = 'video'
                             request_check['recent'] = response_query + type_query + recipient_id
-                            with dataLock:
-                                print('======================================request check=====================================')
+                            try:
+                                with dataLock:
+                                    print('======================================request check=====================================')
+                                    print(request_check)
+                                    print('======================================request check=====================================')
+                                    if (request_check['previous'] != request_check['recent']):
+                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
+                                        messenger.handle(request.get_json(force=True))
+                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                yourThread.start()
+                                request_check['previous'] = request_check['recent']
+                                request_check['recent'] = ''
+                                print('=============================== verify ==============================')
                                 print(request_check)
-                                print('======================================request check=====================================')
-                                if (request_check['previous'] != request_check['recent']):
-                                    send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
-                                    messenger.handle(request.get_json(force=True))
-                            yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                            yourThread.start()
-                            request_check['previous'] = request_check['recent']
-                            request_check['recent'] = ''
-                            print('=============================== verify ==============================')
-                            print(request_check)
-                            print('=============================== verify ==============================')
-                            return 'start'
+                                print('=============================== verify ==============================')
+                                return 'start'
+                            except:
+                                send_message(recipient_id,'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
                         if receive_postback[0] == "Down_youtube":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id, 'Erreur veuillez recommencer')
@@ -234,28 +249,32 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'down_audio'
                                 request_check['recent'] = response_query + type_query + recipient_id
-                                with dataLock:
-                                    print('======================================request check=====================================')
+                                try:
+                                    with dataLock:
+                                        print('======================================request check=====================================')
+                                        print(request_check)
+                                        print('======================================request check=====================================')
+                                        if (request_check['previous'] != request_check['recent']):
+                                            send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
+                                            check = find_ydl_url(receive_postback[1])
+                                            filesize = check["filesize"]
+                                            if filesize < 25690112:
+                                                audio_path = download_audio(receive_postback[1])
+                                                upload_file_filedata(recipient_id, audio_path['output'])
+                                                send_message(recipient_id, 'Profiter bien')
+                                            else:
+                                                send_message(recipient_id,
+                                                             "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+                                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                    yourThread.start()
+                                    request_check['previous'] = request_check['recent']
+                                    request_check['recent'] = ''
+                                    print('=============================== verify ==============================')
                                     print(request_check)
-                                    print('======================================request check=====================================')
-                                    if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
-                                        check = find_ydl_url(receive_postback[1])
-                                        filesize = check["filesize"]
-                                        if filesize < 25690112:
-                                            audio_path = download_audio(receive_postback[1])
-                                            upload_file_filedata(recipient_id, audio_path['output'])
-                                            send_message(recipient_id, 'Profiter bien')
-                                        else:
-                                            send_message(recipient_id,
-                                                         "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                                yourThread.start()
-                                request_check['previous'] = request_check['recent']
-                                request_check['recent'] = ''
-                                print('=============================== verify ==============================')
-                                print(request_check)
-                                print('=============================== verify ==============================')
+                                    print('=============================== verify ==============================')
+                                except:
+                                    send_message(recipient_id,
+                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
 
                         if receive_postback[0] == "video_download":
                             if len(receive_postback) < 2:
@@ -264,27 +283,31 @@ def receive_message():
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'down_video'
                                 request_check['recent'] = response_query + type_query + recipient_id
-                                with dataLock:
-                                    print('======================================request check=====================================')
+                                try:
+                                    with dataLock:
+                                        print('======================================request check=====================================')
+                                        print(request_check)
+                                        print('======================================request check=====================================')
+                                        if (request_check['previous'] != request_check['recent']):
+                                            send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
+                                            check = find_ydl_url(receive_postback[1])
+                                            filesize = check["filesize"]
+                                            if filesize < 25690112:
+                                                audio_path = download_video(receive_postback[1])
+                                                upload_file_filedata(recipient_id, audio_path)
+                                                send_message(recipient_id, 'Profiter bien')
+                                            else:
+                                                send_message(recipient_id, "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+                                    yourThread = threading.Timer(POOL_TIME, timeout(), ())
+                                    yourThread.start()
+                                    request_check['previous'] = request_check['recent']
+                                    request_check['recent'] = ''
+                                    print('=============================== verify ==============================')
                                     print(request_check)
-                                    print('======================================request check=====================================')
-                                    if (request_check['previous'] != request_check['recent']):
-                                        send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
-                                        check = find_ydl_url(receive_postback[1])
-                                        filesize = check["filesize"]
-                                        if filesize < 25690112:
-                                            audio_path = download_video(receive_postback[1])
-                                            upload_file_filedata(recipient_id, audio_path)
-                                            send_message(recipient_id, 'Profiter bien')
-                                        else:
-                                            send_message(recipient_id, "Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
-                                yourThread = threading.Timer(POOL_TIME, timeout(), ())
-                                yourThread.start()
-                                request_check['previous'] = request_check['recent']
-                                request_check['recent'] = ''
-                                print('=============================== verify ==============================')
-                                print(request_check)
-                                print('=============================== verify ==============================')
+                                    print('=============================== verify ==============================')
+                                except:
+                                    send_message(recipient_id,
+                                                 'Désolé, Une Erreur est survenue😪😪\n\n Essayer une autre video')
     return 'success'
 
 
