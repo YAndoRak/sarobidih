@@ -150,7 +150,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video⏭️')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
                         elif receive_postback[0] == "IMAGE_view":
                             if len(receive_postback) < 2:
                                 send_message(recipient_id,
@@ -178,7 +178,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video⏭️')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
                         elif receive_postback[0] == "image":
                             response_query = ' '.join(map(str, receive_postback[1:]))
                             send_message(recipient_id, 'ok, Teléchargement {} en cours ....'.format(response_query))
@@ -211,7 +211,7 @@ def receive_message():
                                 print('=============================== verify ==============================')
                                 return 'start'
                             except Exception:
-                                send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video⏭️')
+                                send_message(recipient_id, 'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
 
                         elif receive_postback[0] == "viewvideo":
                             response_query = ' '.join(map(str, receive_postback[1:]))
@@ -273,7 +273,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video⏭️')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
 
                         elif receive_postback[0] == "video_download":
                             if len(receive_postback) < 2:
@@ -306,7 +306,7 @@ def receive_message():
                                     print('=============================== verify ==============================')
                                 except Exception:
                                     send_message(recipient_id,
-                                                 'Désolé, Une Erreur est survenue😪😪\n\nEssayer une autre video⏭️')
+                                                 'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
     return 'success'
 
 
