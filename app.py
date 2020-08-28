@@ -229,10 +229,12 @@ def receive_message():
                                         #messenger.handle(request.get_json(force=True))
                                         check = find_ydl_url(receive_postback[1])
                                         filesize = check["filesize"]
+
                                         if filesize < 25690112:
                                             upload_video_fb(recipient_id, check['url'])
                                             send_message(recipient_id, 'Profiter bien')
                                         else:
+                                            page_video(check[32:], recipient_id)
                                             send_message(recipient_id,"Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
