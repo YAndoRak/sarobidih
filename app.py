@@ -58,7 +58,7 @@ class Messenger(BaseMessenger):
 
                 response = Video(url=payload2)
             else:
-                response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞") + Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+                response = Text(text="Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
         else:
             response = Text(text='This is an example text message.')
         action = response.to_dict()
