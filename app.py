@@ -234,8 +234,8 @@ def receive_message():
                                             upload_video_fb(recipient_id, check['url'])
                                             send_message(recipient_id, 'Profiter bien')
                                         else:
-                                            print(check[:32])
-                                            page_video(check[32:], recipient_id)
+                                            ytb_id = receive_postback[1]
+                                            page_video(ytb_id[32:], recipient_id)
                                             send_message(recipient_id,"Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
