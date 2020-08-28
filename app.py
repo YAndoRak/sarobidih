@@ -235,8 +235,10 @@ def receive_message():
                                             send_message(recipient_id, 'Profiter bien')
                                         else:
                                             ytb_id = receive_postback[1]
+                                            send_message(recipient_id,"Votre video ne pourra pas être diffuser sur messenger et sera donc diffusé dans une page"
+                                                                      "facebook, veuillez patientez svp😞😞")
                                             page_video(ytb_id[32:], recipient_id)
-                                            send_message(recipient_id,"Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
+
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
