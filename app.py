@@ -352,7 +352,7 @@ def upload_video_fb(recipient_id, audio_url):
     },
     "message":{
     "attachment":{
-      "type":"file",
+      "type":"video",
         "payload":{
             "url": audio_url,
             "is_reusable":"True"
