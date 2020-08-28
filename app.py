@@ -51,6 +51,7 @@ class Messenger(BaseMessenger):
         filesize = url_video["filesize"]
         payload2 = url_video['url']
         payload1 = payload[0]
+        ytb_id = payload[1:]
 
 
         if 'viewvideo' in payload1:
@@ -225,7 +226,14 @@ def receive_message():
                                     print('======================================request check=====================================')
                                     if (request_check['previous'] != request_check['recent']):
                                         send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nenvoye en cours📫')
-                                        messenger.handle(request.get_json(force=True))
+                                        #messenger.handle(request.get_json(force=True))
+                                        check = find_ydl_url(receive_postback[1])
+                                        filesize = check["filesize"]
+                                        if filesize < 25690112:
+                                            upload_video_fb(recipient_id, check['url'])
+                                            send_message(recipient_id, 'Profiter bien')
+                                        else:
+                                            send_message(recipient_id,"Messenger à bloqué votre video, parce qu'elle est trop volumineuse😞😞")
                                 yourThread = threading.Timer(POOL_TIME, timeout(), ())
                                 yourThread.start()
                                 request_check['previous'] = request_check['recent']
@@ -386,6 +394,13 @@ def upload_audio_fb(recipient_id, audio_url):
 # def send_message_video(recipien_id, response):
 #     bot.send_video(recipien_id, response)
 #     return "success"
+
+
+def page_video(ytbId, recipient_id):
+    requests.get("https://ytbdlnodejs999.herokuapp.com/"+ytbId+"/"+recipient_id)
+    return 'ok', 200
+
+
 def upload_audio_attachements(recipient_id, attachment_id):
     payload = {
     "recipient":{
