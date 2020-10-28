@@ -537,7 +537,7 @@ def send_generic_template_google(recipient_id, research_query):
     for result in results:
         title = result["title"].encode()
         link = result["link"].encode()
-        desc = result["description"].encode()
+        desc = result["description"].encode('utf8')
         payload.append({
             "title": title.decode(),
             "image_url": "https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2020/05/Section-Google.jpg",
