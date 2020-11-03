@@ -4,6 +4,9 @@ from moviepy.editor import *
 import os
 
 
+
+ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
+ydlaudio = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 def find_ydl_url(url):
     with ydl:
         result = ydl.extract_info(
