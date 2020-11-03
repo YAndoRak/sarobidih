@@ -16,8 +16,8 @@ Werkzeug==1.0.1
 beautifulsoup4
 youtube-search-python
 fbmessenger
-youtube-dl
 moviepy
+youtube-dl==2020.11.1.1
 pdfcrowd
 threaded
 gevent
