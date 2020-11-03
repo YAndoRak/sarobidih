@@ -316,11 +316,14 @@ def receive_message():
                                         print('======================================request check=====================================')
                                         print(request_check)
                                         print('======================================request check=====================================')
+                                        print("Eto zao ligne 319")
                                         if (request_check['previous'] != request_check['recent']):
                                             send_message(recipient_id, 'Please, veuillez patientez🙏🙏\n\nTélechargement en cours📫')
                                             check = find_ydl_url(receive_postback[1])
                                             filesize = check["filesize"]
+                                            print("ETo zao filesize")
                                             if filesize < 25690112:
+                                                print("eto filesize ok")
                                                 audio_path = download_video(receive_postback[1])
                                                 upload_file_filedata(recipient_id, audio_path)
                                                 send_message(recipient_id, 'Profiter bien')
@@ -339,6 +342,7 @@ def receive_message():
                                     print(request_check)
                                     print('=============================== verify ==============================')
                                 except Exception:
+                                    print("Tsy mety")
                                     send_message(recipient_id,
                                                  'Désolé, Une Erreur est survenue😪😪\n\nVeuillez Réssayer après 10 mn⏭️')
     return 'success'
