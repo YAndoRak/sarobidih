@@ -8,6 +8,7 @@ import os
 ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 ydlaudio = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 def find_ydl_url(url):
+    print("ICI C Ligne 10 find_ydl_url")
     with ydl:
         result = ydl.extract_info(
             url,
@@ -33,6 +34,7 @@ def find_ydl_url(url):
 ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 
 def find_ydl_url_test(url):
+    print("ICI C Ligne 36 find_ydl_url_test")
     with ydl:
         result = ydl.extract_info(
             url,
@@ -50,6 +52,7 @@ def find_ydl_url_test(url):
 ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 
 def find_ydl_url(url):
+    print("ICI C Ligne 55 find_ydl_url 2 mtovy")
     with ydl:
         result = ydl.extract_info(
             url,
@@ -76,6 +79,7 @@ ydlaud = youtube_dl.YoutubeDL({'outtmpl': '%(id)s.%(ext)s'})
 
 
 def find_audio_url(url_audio):
+    print("ICI C Ligne 81 find_audio_url")
     with ydlaud:
         resultat = ydlaud.extract_info(
             url_audio,
@@ -100,6 +104,7 @@ def find_audio_url(url_audio):
             return audio_url
 
 def download_video(url):
+    print("ICI C Ligne 107 download_video")
     ydl_opts = {
         'outtmpl': './tmp/video/%(title)s.%(ext)s',
         'format': '18/best',
@@ -112,6 +117,7 @@ def download_video(url):
     return input
 
 def download_audio(url):
+    print("ICI C Ligne 120 download_audio")
     ydl_opts = {
         'outtmpl': './tmp/audio/%(title)s.%(ext)s',
         'format': '18/best',
