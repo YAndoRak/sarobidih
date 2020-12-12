@@ -17,7 +17,7 @@ beautifulsoup4
 youtube-search-python
 fbmessenger
 moviepy
-youtube-dl==2020.11.1.1
+youtube-dl==2020.12.12
 pdfcrowd
 threaded
 gevent
