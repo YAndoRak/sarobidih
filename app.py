@@ -87,12 +87,10 @@ def receive_message():
         for event in output['entry']:
             messaging = event['messaging']
             for message in messaging:
-                print(message)
                 if message.get('message'):
                     recipient_id = message['sender']['id']
                     if message['message'].get('text'):
                         receive_message = message['message'].get('text').split()
-                        print(receive_message)
                         if (receive_message[0] == "search_google"):
                             if len(receive_message) < 2:
                                 send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
@@ -394,7 +392,6 @@ def upload_video_fb(recipient_id, audio_url):
     json=payload)
 
     response = json.loads(reponse.text)
-    print(response)
 
 
 def upload_audio_fb(recipient_id, audio_url):
@@ -445,13 +442,11 @@ def upload_audio_attachements(recipient_id, attachment_id):
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
-    print(reponse)
 
 def upload_audio_filedata(recipient_id,path):
     params = {
         "access_token": ACCESS_TOKEN
     }
-    print(os.getcwd())
     data = {
         # encode nested json to avoid errors during multipart encoding process
         'recipient': json.dumps({
@@ -481,7 +476,6 @@ def upload_file_filedata(recipient_id,path):
     params = {
         "access_token": ACCESS_TOKEN
     }
-    print(os.getcwd())
     data = {
         # encode nested json to avoid errors during multipart encoding process
         'recipient': json.dumps({
@@ -511,7 +505,6 @@ def upload_img_filedata(recipient_id, path):
     params = {
         "access_token": ACCESS_TOKEN
     }
-    print(os.getcwd())
     data = {
         # encode nested json to avoid errors during multipart encoding process
         'recipient': json.dumps({
@@ -545,6 +538,7 @@ def send_generic_template_google(recipient_id, research_query):
     for result in results:
         title = result["title"].encode()
         link = result["link"].encode()
+        print("Le lien : ", link)
         #desc = result["description"].encode('utf8')
         payload.append({
             "title": title.decode(),
