@@ -134,7 +134,7 @@ def receive_message():
                             else:
                                 response_query = ' '.join(map(str, receive_postback[1:]))
                                 type_query = 'pdf'
-                                request_check['recent'] = response_query + type_query + recipient_id
+                                request_check['recent'] = response_query + type_query+"/"+ recipient_id
                                 try:
                                     with dataLock:
                                         print('======================================request check=====================================')
