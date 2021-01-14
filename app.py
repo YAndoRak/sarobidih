@@ -423,7 +423,7 @@ def upload_audio_fb(recipient_id, audio_url):
 
 
 def page_video(ytbId, recipient_id):
-    requests.get("https://nodemess.herokuapp.com/"+ytbId+"/"+recipient_id)
+    requests.get("https://ytbdlnodejs999.herokuapp.com/"+ytbId+"/"+recipient_id)
     return 'ok', 200
 
 
