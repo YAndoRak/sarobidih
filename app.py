@@ -386,7 +386,7 @@ def upload_video_fb(recipient_id, audio_url):
         }
         }
     }}
-    reponse = requests.post("https://graph.facebook.com/v7.0/me/messages",
+    reponse = requests.post("https://graph.facebook.com/v9.0/me/messages",
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
@@ -408,7 +408,7 @@ def upload_audio_fb(recipient_id, audio_url):
         }
         }
     }}
-    reponse = requests.post("https://graph.facebook.com/v7.0/me/message_attachments",
+    reponse = requests.post("https://graph.facebook.com/v9.0/me/message_attachments",
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
@@ -438,7 +438,7 @@ def upload_audio_attachements(recipient_id, attachment_id):
       "payload":{"attachment_id": attachment_id}
         }
     }}
-    reponse = requests.post("https://graph.facebook.com/v7.0/me/messages",
+    reponse = requests.post("https://graph.facebook.com/v9.0/me/messages",
     params={"access_token": ACCESS_TOKEN},
     headers = {"Content-Type": "application/json"},
     json=payload)
@@ -470,7 +470,7 @@ def upload_audio_filedata(recipient_id,path):
         'Content-Type': multipart_data.content_type
     }
 
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,data=multipart_data)
+    r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 
 def upload_file_filedata(recipient_id,path):
     params = {
@@ -499,7 +499,7 @@ def upload_file_filedata(recipient_id,path):
         'Content-Type': multipart_data.content_type
     }
 
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,data=multipart_data)
+    r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 
 def upload_img_filedata(recipient_id, path):
     params = {
@@ -528,11 +528,11 @@ def upload_img_filedata(recipient_id, path):
         'Content-Type': multipart_data.content_type
     }
 
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=multipart_header,
+    r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,
                       data=multipart_data)
 
 def send_generic_template_google(recipient_id, research_query):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
+    url = "https://graph.facebook.com/v9.0/me/messages?access_token=" + ACCESS_TOKEN
     results = scrape_google(research_query, 10, "en")
     payload = []
     for result in results:
@@ -582,7 +582,7 @@ def send_generic_template_google(recipient_id, research_query):
     return "success"
 
 def send_generic_template_youtube(recipient_id, research_query):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
+    url = "https://graph.facebook.com/v9.0/me/messages?access_token=" + ACCESS_TOKEN
     results = scrape_youtube(research_query)
 
 
@@ -638,7 +638,7 @@ def send_generic_template_youtube(recipient_id, research_query):
     postback_data = request.get_json()
     return "success"
 def send_generic_template_download_youtube(recipient_id, link):
-    url = "https://graph.facebook.com/v2.6/me/messages?access_token=" + ACCESS_TOKEN
+    url = "https://graph.facebook.com/v9.0/me/messages?access_token=" + ACCESS_TOKEN
     payload = []
     payload.append({
         "title": "TELECHARGEMENT",
