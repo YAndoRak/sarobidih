@@ -21,13 +21,6 @@ ACCESS_TOKEN = 'EAAI1QygXjocBAAfH7EVZCSPngvnfAi45lITN4Fd4eywScNSpH6lAcgDzobVZBjs
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 
-elements2 = [{
-    "type": "phone_number",
-    "title": "Jao's phone",
-    "payload": "+261329125857"
-}]
-
-
 ################ fb messenger #################"""
 #test
 def process_message(message):
