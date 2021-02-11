@@ -494,7 +494,7 @@ def upload_file_filedata(recipient_id,path):
 		'Content-Type': multipart_data.content_type
 	}
 
-	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
+	r = requests.post("http://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 	print("Le requete ligne 498",r)
 def upload_img_filedata(recipient_id, path):
 	params = {
