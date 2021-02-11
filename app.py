@@ -469,33 +469,41 @@ def upload_audio_filedata(recipient_id,path):
     r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 
 def upload_file_filedata(recipient_id,path):
-    params = {
-        "access_token": ACCESS_TOKEN
-    }
-    data = {
-        # encode nested json to avoid errors during multipart encoding process
-        'recipient': json.dumps({
-            'id': recipient_id
-        }),
-        # encode nested json to avoid errors during multipart encoding process
-        'message': json.dumps({
-            'attachment': {
-                'type': 'file',
-                'payload': {}
-            }
-        }),
-        'filedata': (os.path.basename(path), open(path, 'rb'))
-    }
+	data = {
+	    'recipient': '{"id":'recipient_id'}',
+	    'message': '{"attachment":{"type":"video", "payload":{}}}'
+	}
+	files = {
+	    'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')}
+	params = {'access_token': ACCESS_TOKEN}
+	resp = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, data=data, files=files)    
+    # params = {
+    #     "access_token": ACCESS_TOKEN
+    # }
+    # data = {
+    #     # encode nested json to avoid errors during multipart encoding process
+    #     'recipient': json.dumps({
+    #         'id': recipient_id
+    #     }),
+    #     # encode nested json to avoid errors during multipart encoding process
+    #     'message': json.dumps({
+    #         'attachment': {
+    #             'type': 'file',
+    #             'payload': {}
+    #         }
+    #     }),
+    #     'filedata': (os.path.basename(path), open(path, 'rb'))
+    # }
 
-    # multipart encode the entire payload
-    multipart_data = MultipartEncoder(data)
+    # # multipart encode the entire payload
+    # multipart_data = MultipartEncoder(data)
 
-    # multipart header from multipart_data
-    multipart_header = {
-        'Content-Type': multipart_data.content_type
-    }
+    # # multipart header from multipart_data
+    # multipart_header = {
+    #     'Content-Type': multipart_data.content_type
+    # }
 
-    r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
+    # r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 
 def upload_img_filedata(recipient_id, path):
     params = {
