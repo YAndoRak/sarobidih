@@ -484,7 +484,7 @@ def upload_file_filedata(recipient_id,path):
                 'payload': {}
             }
         }),
-        'filedata': (os.path.basename(path), open(path, 'rb'))
+        'url': (os.path.basename(path), open(path, 'rb'))
     }
 
     # multipart encode the entire payload
