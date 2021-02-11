@@ -17,7 +17,7 @@ import youtube_dl
 
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAI1QygXjocBAAfH7EVZCSPngvnfAi45lITN4Fd4eywScNSpH6lAcgDzobVZBjs2D1Ja4YA5kUlmNVG0R6XFD3GeWh9nbESy1xv4buQZBEXc7d9huW8oWPWgN4C38KMExIcLjEsYRoxiblsJlZC0B59Xb2jw5ZAAHHwd37nZCnrgH6ZAAOE1ZBRKNbbKgSYQoiYZD'
+ACCESS_TOKEN = 'EAAI1QygXjocBAG4KTfDN4NJCuwahsJdr6KZBY2GCWhamv01w52O6SI15JADexVROAZCHNZBXT2PpIGYfWcuUahzVZB2JXv9h4mdl4BvK0ZA0zwBuRo15M3cEHGfMuZCUH4IzSWjMmKBXNsmcZAFJFz0IwOOJ6sEYYan8EAkPqfdPrvntvKDtxiW'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 
@@ -484,7 +484,7 @@ def upload_file_filedata(recipient_id,path):
                 'payload': {}
             }
         }),
-        'url': (os.path.basename(path), open(path, 'rb'))
+        'filedata': (os.path.basename(path), open(path, 'rb'))
     }
 
     # multipart encode the entire payload
