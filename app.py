@@ -470,11 +470,18 @@ def upload_audio_filedata(recipient_id,path):
 
 def upload_file_filedata(recipient_id,path):
 	data = {
-		'recipient': '{"id":'recipient_id'}',
-		'message': '{"attachment":{"type":"video", "payload":{}}}'
-	}
-	files = {
-		'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')}
+		# encode nested json to avoid errors during multipart encoding process
+		'recipient': json.dumps({
+			'id': recipient_id
+		}),
+		# encode nested json to avoid errors during multipart encoding process
+		'message': json.dumps({
+			'attachment': {
+				'type': 'video',
+				'payload': {}
+			}
+		}),
+	files = {'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')}
 	params = {'access_token': ACCESS_TOKEN}
 	resp = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, data=data, files=files)    
 	# params = {
