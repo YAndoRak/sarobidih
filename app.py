@@ -485,16 +485,9 @@ def upload_file_filedata(recipient_id,path):
 		}),
 		'filedata': (os.path.basename(path), open(path, 'rb'))
 	}
-
 	# multipart encode the entire payload
 	multipart_data = MultipartEncoder(data)
-
-	# multipart header from multipart_data
-	multipart_header = {
-		'Content-Type': multipart_data.content_type
-	}
-
-	r = requests.post("http://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
+	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params,data=multipart_data)
 	print("Le requete ligne 498",r)
 def upload_img_filedata(recipient_id, path):
 	params = {
