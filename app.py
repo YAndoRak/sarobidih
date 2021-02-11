@@ -468,27 +468,22 @@ def upload_audio_filedata(recipient_id,path):
 
 	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,data=multipart_data)
 def upload_file_filedata(recipient_id,path):
-	params = {
-		"access_token": ACCESS_TOKEN
-	}
-	data = {
-		# encode nested json to avoid errors during multipart encoding process
-		'recipient': json.dumps({
-			'id': recipient_id
-		}),
-		# encode nested json to avoid errors during multipart encoding process
-		'message': json.dumps({
-			'attachment': {
-				'type': 'file',
-				'payload': {}
-			}
-		}),
-		'filedata': (os.path.basename(path), open(path, 'rb'))
-	}
-	# multipart encode the entire payload
-	multipart_data = MultipartEncoder(data)
-	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params,data=multipart_data)
-	print("Le requete ligne 498",r)
+	payload ={ 
+	"recipient":{
+	  "id":recipient_id
+	},
+	"message":{
+	"attachment":{
+	  "type":"video", 
+		"payload":{
+			'filedata': (os.path.basename(path), open(path, 'rb'))
+		}
+		}
+	}}
+	reponse = requests.post("https://graph.facebook.com/v9.0/me/messages",
+	params={"access_token": ACCESS_TOKEN},
+	json=payload)
+	print("Le requete ligne 498",reponse)
 def upload_img_filedata(recipient_id, path):
 	params = {
 		"access_token": ACCESS_TOKEN
