@@ -491,6 +491,8 @@ def upload_file_filedata(recipient_id,path):
                 'payload': {}
             }
         }),
+        test00=os.path.basename(path)
+        print(test00)
         'filedata': (os.path.basename(path), open(path, 'rb'))
     }
 
