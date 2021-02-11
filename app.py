@@ -231,7 +231,9 @@ def receive_message():
 										filesize = check["filesize"]
 
 										if filesize < 25690112:
-											upload_video_fb(recipient_id, check['url'])
+											attacheID = upload_video_fb(recipient_id, check['url'])
+											print(attacheID)
+											upload_video_attachements(recipient_id, attacheID)
 											send_message(recipient_id, 'Profiter bien')
 										else:
 											ytb_id = receive_postback[1]
@@ -366,7 +368,7 @@ def send_message(recipient_id, response):
 	return "success"
 
 
-def upload_video_fb(recipient_id, audio_url):
+def upload_video_fb(recipient_id, video_url):
 	payload ={
 	"recipient":{
 	  "id":recipient_id
@@ -375,7 +377,7 @@ def upload_video_fb(recipient_id, audio_url):
 	"attachment":{
 	  "type":"video",
 		"payload":{
-			"url": audio_url,
+			"url": video_url,
 			"is_reusable":"True"
 		}
 		}
@@ -384,8 +386,8 @@ def upload_video_fb(recipient_id, audio_url):
 	params={"access_token": ACCESS_TOKEN},
 	headers = {"Content-Type": "application/json"},
 	json=payload)
-
 	response = json.loads(reponse.text)
+	return response
 
 
 def upload_audio_fb(recipient_id, audio_url):
@@ -431,6 +433,22 @@ def upload_audio_attachements(recipient_id, attachment_id):
 	"message":{
 	"attachment":{
 	  "type":"audio", 
+	  "payload":{"attachment_id": attachment_id}
+		}
+	}}
+	reponse = requests.post("https://graph.facebook.com/v9.0/me/messages",
+	params={"access_token": ACCESS_TOKEN},
+	headers = {"Content-Type": "application/json"},
+	json=payload)
+
+def upload_video_attachements(recipient_id, attachment_id):
+	payload = {
+	"recipient":{
+	  "id":recipient_id
+	},
+	"message":{
+	"attachment":{
+	  "type":"video", 
 	  "payload":{"attachment_id": attachment_id}
 		}
 	}}
