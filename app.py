@@ -323,6 +323,7 @@ def receive_message():
                                             if filesize < 25690112:
                                                 print("eto filesize ok")
                                                 audio_path = download_video(receive_postback[1])
+                                                print(audio_path)
                                                 upload_file_filedata(recipient_id, audio_path)
                                                 send_message(recipient_id, 'Profiter bien')
                                             else:
