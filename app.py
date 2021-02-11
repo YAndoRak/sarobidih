@@ -480,8 +480,11 @@ def upload_file_filedata(recipient_id,path):
 				'type': 'video',
 				'payload': {}
 			}
-		}),
-	files = {'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')}
+		})
+		}
+	files = {
+		'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')
+		}
 	params = {'access_token': ACCESS_TOKEN}
 	resp = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, data=data, files=files)    
 	# params = {
