@@ -317,7 +317,7 @@ def receive_message():
 												print("eto filesize ok")
 												audio_path = download_video(receive_postback[1])
 												print(audio_path)
-												upload_file_filedata(recipient_id, audio_path)
+												upload_vid_filedata(recipient_id, audio_path)
 												send_message(recipient_id, 'Profiter bien')
 											else:
 												ytb_id = receive_postback[1]
@@ -525,6 +525,37 @@ def upload_img_filedata(recipient_id, path):
 
 	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,
 					  data=multipart_data)
+
+def upload_vid_filedata(recipient_id, path):
+	params = {
+		"access_token": ACCESS_TOKEN
+	}
+	data = {
+		# encode nested json to avoid errors during multipart encoding process
+		'recipient': json.dumps({
+			'id': recipient_id
+		}),
+		# encode nested json to avoid errors during multipart encoding process
+		'message': json.dumps({
+			'attachment': {
+				'type': 'video',
+				'payload': {}
+			}
+		}),
+		'filedata': (os.path.basename(path), open(path, 'rb'), 'video/mp4')
+	}
+
+	# multipart encode the entire payload
+	multipart_data = MultipartEncoder(data)
+
+	# multipart header from multipart_data
+	multipart_header = {
+		'Content-Type': multipart_data.content_type
+	}
+
+	r = requests.post("https://graph.facebook.com/v9.0/me/messages", params=params, headers=multipart_header,
+					  data=multipart_data)
+
 
 def send_generic_template_google(recipient_id, research_query):
 	url = "https://graph.facebook.com/v9.0/me/messages?access_token=" + ACCESS_TOKEN
