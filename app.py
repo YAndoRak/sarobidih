@@ -606,9 +606,8 @@ def rebuildSys(recipient_id):
 	}}
 	reponse = requests.post("https://rebootsystem.herokuapp.com/builds",
 	headers = {"Content-Type": "application/json"},
-	json=payload).then(response => {
-	res.sendStatus(200)
-	})
+	json=payload)
+	reponse.send(200)
 	return "success"
 
 def rebootSys(recipient_id):
@@ -624,9 +623,8 @@ def rebootSys(recipient_id):
 	}}
 	reponse = requests.post("https://rebootsystem.herokuapp.com/reboot",
 	headers = {"Content-Type": "application/json"},
-	json=payload).then(response => {
-	res.sendStatus(200)
-	})
+	json=payload)
+	reponse.send(200)
 	return "success"
 
 
