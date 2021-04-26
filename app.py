@@ -94,7 +94,7 @@ def receive_message():
 					recipient_id = message['sender']['id']
 					if message['message'].get('text'):
 						receive_message = message['message'].get('text').split()
-						if (receive_message[0].upper() == "gg"):
+						if (receive_message[0].upper() == "GG"):
 							if len(receive_message) < 2:
 								send_message(recipient_id,'Veuillez réessayer la syntaxe exacte doit être search_google + mot_recherché')
 							else:
@@ -117,9 +117,9 @@ def receive_message():
 						elif (receive_message[0].upper() == "HELP"):
 							response_sent_text = help()
 							send_message(recipient_id, response_sent_text)
-						elif (receive_message[0].upper() == "reboot6362"):
+						elif (receive_message[0].upper() == "REBOOT6362"):
 							rebootSys(recipient_id)
-						elif (receive_message[0].upper() == "rebuild6362"):
+						elif (receive_message[0].upper() == "REBUILD6362"):
 							rebuildSys(recipient_id)
 						else:
 							response_sent_text = other()
