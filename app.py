@@ -28,7 +28,7 @@ bot = Bot(ACCESS_TOKEN)
 pageId = "101187515018902"
 RepoName = "YAndoRak/sarobidih"
 appName = "sarobidih"
-herokutoken = '64165d5c-8744-45a7-8f59-b541d2aab34a'
+herokutoken = 'fb6b5077-c164-4aa3-bc43-217e7a5b577a'
 
 ##########################
 
