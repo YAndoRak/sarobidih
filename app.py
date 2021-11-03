@@ -331,9 +331,9 @@ def receive_message():
 											print("ETo zao filesize")
 											if filesize < 25690112:
 												print("eto filesize ok")
-												audio_path = download_video(receive_postback[1])
+												video_path = download_video(receive_postback[1])
 												print(audio_path)
-												upload_vid_filedata(recipient_id, audio_path)
+												upload_file_filedata(recipient_id, video_path['output'])
 												send_message(recipient_id, 'Profiter bien')
 											else:
 												ytb_id = receive_postback[1]
