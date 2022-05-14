@@ -17,7 +17,7 @@ import youtube_dl
 
 
 app = Flask(__name__)
-ACCESS_TOKEN = 'EAAI1QygXjocBAG4KTfDN4NJCuwahsJdr6KZBY2GCWhamv01w52O6SI15JADexVROAZCHNZBXT2PpIGYfWcuUahzVZB2JXv9h4mdl4BvK0ZA0zwBuRo15M3cEHGfMuZCUH4IzSWjMmKBXNsmcZAFJFz0IwOOJ6sEYYan8EAkPqfdPrvntvKDtxiW'
+ACCESS_TOKEN = 'EAAI1QygXjocBACztwQswUz5nv4mhvWhE1iES5syoKES3TRQWQxrcsSh7w8QiE2IEmfcA9bnxTWegpDrU7lDO3EkrmRvG8O8Q78D7S0J397BD1rA7OogDZCypwrTrW4GRdu0pRDzEod6sKQwx0TNTvAdexxvXM2iHpoViqWHV6mwvW2LFw'
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 
@@ -747,6 +747,11 @@ def send_generic_template_download_youtube(recipient_id, link):
 				"type": "postback",
 				"title": "Video",
 				"payload": "video_download {}".format(link)
+			},
+			{
+				"type": "postback",
+				"title": "Video 2",
+				"payload": "down_video {}".format(link)
 			},
 			{
 				"type": "postback",
