@@ -17,7 +17,9 @@ import youtube_dl
 
 
 app = Flask(__name__)
+
 ACCESS_TOKEN = 'EAAI1QygXjocBACztwQswUz5nv4mhvWhE1iES5syoKES3TRQWQxrcsSh7w8QiE2IEmfcA9bnxTWegpDrU7lDO3EkrmRvG8O8Q78D7S0J397BD1rA7OogDZCypwrTrW4GRdu0pRDzEod6sKQwx0TNTvAdexxvXM2iHpoViqWHV6mwvW2LFw'
+
 VERIFY_TOKEN = 'd8230120b243bf986a3f998a24db674c451160a6'
 bot = Bot(ACCESS_TOKEN)
 
@@ -331,9 +333,9 @@ def receive_message():
 											print("ETo zao filesize")
 											if filesize < 25690112:
 												print("eto filesize ok")
-												audio_path = download_video(receive_postback[1])
+												video_path = download_video(receive_postback[1])
 												print(audio_path)
-												upload_vid_filedata(recipient_id, audio_path)
+												upload_file_filedata(recipient_id, video_path['output'])
 												send_message(recipient_id, 'Profiter bien')
 											else:
 												ytb_id = receive_postback[1]

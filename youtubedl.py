@@ -103,8 +103,21 @@ def find_audio_url(url_audio):
             print('=================================== M4a ====================================')
             return audio_url
 
+#def download_video(url):
+#    print("ICI C Ligne 107 download_video")
+#    ydl_opts = {
+ #       'outtmpl': './tmp/video/%(title)s.%(ext)s',
+ #       'format': '18/best',
+ #   }
+ #   with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+  #      ydl.download([url])
+   #     info_dict = ydl.extract_info(url, download=False)
+#        input = ydl.prepare_filename(info_dict)
+#
+#    return input*/
+
 def download_video(url):
-    print("ICI C Ligne 107 download_video")
+    print("ICI C Ligne inconnu download_video")
     ydl_opts = {
         'outtmpl': './tmp/video/%(title)s.%(ext)s',
         'format': '18/best',
@@ -114,7 +127,16 @@ def download_video(url):
         info_dict = ydl.extract_info(url, download=False)
         input = ydl.prepare_filename(info_dict)
 
-    return input
+    output = '{}mp4'.format(input[:-3])
+    video = VideoFileClip(os.path.join(input))
+    video.write_videofile(os.path.join(output))
+    url = {
+        "input": input,
+        "output": output
+    }
+    return url
+
+
 
 def download_audio(url):
     print("ICI C Ligne 120 download_audio")
